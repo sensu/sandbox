@@ -24,7 +24,7 @@ While this sandbox is internal to Sensu, please add feedback to this [GoogleDoc]
 [Download from GitHub](https://github.com/sensu/sandbox/archive/core.zip) or clone the repository:
 
 ```
-git clone git@github.com:sensu/sandbox.git && cd sandbox && git checkout core
+git clone git@github.com:sensu/sandbox.git && cd sandbox
 ```
 
 If you downloaded the zip file from GitHub, unzip the folder and move it into your Documents folder.

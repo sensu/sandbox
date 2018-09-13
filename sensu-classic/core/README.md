@@ -1,4 +1,4 @@
-### Welcome to the Sensu Core sandbox!
+### Welcome to the Sensu Classic Core sandbox!
 
 This tutorial will get you up and running with Sensu.
 
@@ -24,16 +24,16 @@ While this sandbox is internal to Sensu, please add feedback to this [GoogleDoc]
 [Download from GitHub](https://github.com/sensu/sandbox/archive/core.zip) or clone the repository:
 
 ```
-git clone git@github.com:sensu/sandbox.git && cd sandbox && git checkout core
+git clone git@github.com:sensu/sandbox.git && cd sandbox/sensu-classic/core
 ```
 
 If you downloaded the zip file from GitHub, unzip the folder and move it into your Documents folder.
-Then open Terminal and enter `cd Documents` followed by `cd sandbox-core`.
+Then open Terminal and enter `cd Documents` followed by `cd sandbox/sensu-classic/core`.
 
 **3. Start Vagrant:**
 
 ```
-cd sensu-classic/core && vagrant up
+vagrant up
 ```
 
 This will take around five minutes, so if you haven't already, [read about how Sensu works](https://docs.sensu.io/sensu-core/1.4/overview/architecture) or see the [appendix](#appendix) for details about the sandbox.

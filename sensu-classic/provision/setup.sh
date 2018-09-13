@@ -32,7 +32,7 @@ cp /vagrant_files/etc/yum.repos.d/influxdb.repo /etc/yum.repos.d/influxdb.repo
 cp /vagrant_files/etc/yum.repos.d/grafana.repo /etc/yum.repos.d/grafana.repo
 
 # Add the EPEL repositories (for installing Redis)
-[[ "$(rpm -qa | grep epl-release)" ]] && rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+[[ "$(rpm -qa | grep epel-release)" ]] || rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
 
 # Import GPG keys
 cd /tmp
@@ -127,7 +127,7 @@ curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana
 echo -e "================="
 echo "Sensu $VERSION is now up and running!"
 if [ -z ${ENABLE_SENSU_SANDBOX_PORT_FORWRDING+x} ]; then 
-echo "Port forwarding from the VM to is disabled:"
+echo "Port forwarding from the VM to this host is disabled:"
 echo "  Access the dashboard at http://${IPADDR}:3000"
 echo "  Access Grafana at http://${IPADDR}:4000"
 else 

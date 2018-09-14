@@ -89,6 +89,7 @@ systemctl disable firewalld
 # Install Needed Yum Packages
 yum install -q -y ca-certificates curl jq nc vim ntp redis influxdb grafana nagios-plugins-ssh
 
+
 cd $HOME
 cp /vagrant_files/.bash_profile /home/vagrant/
 echo $PWD
@@ -139,9 +140,12 @@ cp /vagrant_files/etc/influxdb/influxdb.conf /etc/influxdb/influxdb.conf
 
 # Going to do some general setup stuff
 
-#Start up other services
+#Start up redis 
 sudo systemctl restart redis.service
 sudo systemctl enable redis.service
+
+# Flush redis
+redis-cli FLUSHALL
 
 if [ -z ${SE_USER+x} ]; then 
   sudo systemctl restart sensu-{server,api}.service

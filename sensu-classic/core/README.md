@@ -33,10 +33,12 @@ Then open Terminal and enter `cd Documents` followed by `cd sandbox/sensu-classi
 **3. Start Vagrant:**
 
 ```
-vagrant up
+ENABLE_SENSU_SANDBOX_PORT_FORWRDING=1 vagrant up
 ```
 
 This will take around five minutes, so if you haven't already, [read about how Sensu works](https://docs.sensu.io/sensu-core/1.4/overview/architecture) or see the [appendix](#appendix) for details about the sandbox.
+
+_NOTE: This will configure VirtualBox to forward a couple of tcp ports (3000,4000) from the sandbox VM machine to the localhost to make it easier for you to interact with the Sensu installation._
 
 **4. SSH into the sandbox:**
 
@@ -46,8 +48,15 @@ Thanks for waiting! To start using the sandbox:
 vagrant ssh
 ```
 
-_NOTE: To exit out of the sandbox, use `CTRL`+`D`.
-Use `vagrant destroy` then `vagrant up` to erase and restart the sandbox._
+You should now have shell access to the sandbox and should be greeted with this sandbox prompt:  
+```
+sensu_CC_sandbox $
+```
+
+_NOTE: To exit out of the sandbox, use `CTRL`+`D`.  
+Use `vagrant destroy` then `vagrant up` to erase and restart the sandbox.
+Use `vagrant provision` to reset sandbox's sensu configuration to the beginning of this lesson_
+
 
 ---
 
@@ -57,12 +66,13 @@ First off, we'll make sure everything is working correctly by creating a few eve
 
 **1. Use the settings API to see Sensu's configuration:**
 
+From inside the sandbox run:
 ```
 curl -s http://localhost:4567/settings | jq .
 ```
 
-With the Sensu server, we can see that we have no active clients, and that Sensu is using RabbitMQ as the transport and Redis as the datastore.
-We can see a lot of this same information in the [dashboard datacenter view](http://172.31.255.4:3000/#/datacenters).
+With the Sensu server, we can see that we have no active clients, and that Sensu is using Redis as the transport and datastore.
+We can see a lot of this same information in the [dashboard datacenter view](http://localhost:3000/#/datacenters).
 
 ```json
 $ curl -s http://localhost:4567/settings | jq .
@@ -103,6 +113,8 @@ $ curl -s http://localhost:4567/settings | jq .
   }
 }
 ```
+
+_NOTE: The dashboard links here work on your workstation where you are running the sandbox if VM port forwarding was enabled as instructed in the set up step above._ 
 
 **2. Create an event that warns us that docs.sensu.io is loading slowly (and resolve it)**
 

@@ -24,11 +24,11 @@ While this sandbox is internal to Sensu, please add feedback to this [GoogleDoc]
 [Download from GitHub](https://github.com/sensu/sandbox/archive/enterprise.zip) or clone the repository:
 
 ```
-git clone git@github.com:sensu/sandbox.git && cd sandbox
+git clone git@github.com:sensu/sandbox.git && cd sandbox/
 ```
 
 If you downloaded the zip file from GitHub, unzip the folder and move it into your Documents folder.
-Then open Terminal and enter `cd Documents` followed by `cd sandbox-enterprise`.
+Then open Terminal and enter `cd Documents` followed by `cd sandbox`.
 
 **3. Add your Sensu Enterprise username and password**
 
@@ -43,7 +43,7 @@ cd sensu-classic/enterprise && export SE_USER=REPLACEME && export SE_PASS=REPLAC
 **4. Start Vagrant:**
 
 ```
-vagrant up
+ENABLE_SENSU_SANDBOX_PORT_FORWRDING=1 vagrant up
 ```
 
 This will take around five minutes, so if you haven't already, [read about how Sensu works]().
@@ -54,6 +54,12 @@ This will take around five minutes, so if you haven't already, [read about how S
 vagrant ssh
 ```
 
+You should now have shell access to the sandbox and should be greeted with this sandbox prompt:
+```
+sensu_CE_sandbox $
+```
+
+`CE` stands for Classic Enterprise. If you see a different prompt you may need to go back and make sure the the SE_USER and SE_PASS variables are set 
 ---
 
 ## Lesson \#1: Create a monitoring event

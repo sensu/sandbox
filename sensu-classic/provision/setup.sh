@@ -15,7 +15,7 @@ rm -rf /etc/sensu/*
 cp /vagrant_files/etc/yum.repos.d/sensu-core.repo /etc/yum.repos.d/sensu-core.repo
 
 if [ ! -f $HOME/.vagrant_env ] ; then
-  echo "storing state"
+  echo "storing vagrant env state"
   touch $HOME/.vagrant_env
   if [ ! -z ${SE_USER+x} ]; then 
     echo "SE_USER=${SE_USER}" >> $HOME/.vagrant_env
@@ -26,7 +26,6 @@ if [ ! -f $HOME/.vagrant_env ] ; then
 
   if [ ! -z ${ENABLE_SENSU_SANDBOX_PORT_FORWRDING+x} ]; then
     echo "ENABLE_SENSU_SANDBOX_PORT_FORWRDING=${ENABLE_SENSU_SANDBOX_PORT_FORWRDING}" >> $HOME/.vagrant_env
-    echo "hey"
   fi
 fi
 
@@ -44,11 +43,11 @@ fi
 if [ -z ${SE_USER+x} ]; then 
   VERSION="Classic Core"
   VER="CC"
-  echo "Preparing Sensu Classic Core"
+  echo "Preparing Sensu Classic Core Sandbox"
 else
   VERSION="Classic Enterprise"
   VER="CE"
-  echo "Preparing Sensu Classic Enterprise"
+  echo "Preparing Sensu Classic Enterprise Sandbox"
 
 # Add the Sensu Enterprise YUM repository
 echo "[sensu-enterprise]
@@ -92,17 +91,16 @@ yum install -q -y ca-certificates curl jq nc vim ntp redis influxdb grafana nagi
 
 cd $HOME
 cp /vagrant_files/.bash_profile /home/vagrant/
-echo $PWD
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
   # Install Sensu and Uchiwa
-  echo "install sensu CC"
+  echo "Installing Sensu Classic Core"
   echo 'export PS1="sensu_CC_sandbox $ "' >> /home/vagrant/.bash_profile
   yum install -q -y sensu uchiwa 
 else
   # If Enterprise
   # install Sensu and Dashboard
-  echo "install sensu CE"
+  echo "Installing Sensu Classic Enterprise"
   echo 'export PS1="sensu_CE_sandbox $ "' >> /home/vagrant/.bash_profile
   yum install -q -y sensu-enterprise sensu-enterprise-dashboard
 fi

@@ -8,21 +8,62 @@ IPS=$(hostname -I)
 IPADDR=$( echo ${IPS[0]} | sed 's/^[ \t]*//;s/[ \t]*$//')
 
 # Clean stale provision data
-rm /var/lib/grafana/grafana.db
+rm -f /var/lib/grafana/grafana.db
 rm -rf /var/lib/grafana/sessions/*
 rm -rf /etc/sensu/*
+
+cp /vagrant_files/etc/yum.repos.d/sensu-core.repo /etc/yum.repos.d/sensu-core.repo
+
+if [ ! -f $HOME/.vagrant_env ] ; then
+  echo "storing state"
+  touch $HOME/.vagrant_env
+  if [ ! -z ${SE_USER+x} ]; then 
+    echo "SE_USER=${SE_USER}" >> $HOME/.vagrant_env
+  fi
+  if [ ! -z ${SE_PASS+x} ]; then 
+    echo "SE_PASS=${SE_PASS}" >> $HOME/.vagrant_env
+  fi
+
+  if [ ! -z ${ENABLE_SENSU_SANDBOX_PORT_FORWRDING+x} ]; then
+    echo "ENABLE_SENSU_SANDBOX_PORT_FORWRDING=${ENABLE_SENSU_SANDBOX_PORT_FORWRDING}" >> $HOME/.vagrant_env
+    echo "hey"
+  fi
+fi
+
+
+
+if [ -f $HOME/.vagrant_env ] ; then
+  source $HOME/.vagrant_env
+  echo "Using saved provisioning state:"
+  echo "ENABLE_SENSU_SANDBOX_PORT_FORWRDING=${ENABLE_SENSU_SANDBOX_PORT_FORWRDING}"
+  echo "SE_USER=${SE_USER}" 
+  echo "SE_PASS=${SE_PASS}"
+fi
 
 # Set up Sensu's repository
 if [ -z ${SE_USER+x} ]; then 
   VERSION="Classic Core"
   VER="CC"
-  echo "Using Sensu CC"
-  cp /vagrant_files/etc/yum.repos.d/sensu-core.repo /etc/yum.repos.d/sensu-core.repo
+  echo "Preparing Sensu Classic Core"
 else
   VERSION="Classic Enterprise"
   VER="CE"
-  echo "Using Sensu CE"
-  cp /vagrant_files/etc/yum.repos.d/sensu-enterprise.repo /etc/yum.repos.d/sensu-enterprise.repo
+  echo "Preparing Sensu Classic Enterprise"
+
+# Add the Sensu Enterprise YUM repository
+echo "[sensu-enterprise]
+name=sensu-enterprise
+baseurl=http://$SE_USER:$SE_PASS@enterprise.sensuapp.com/yum/noarch/
+gpgcheck=0
+enabled=1" | tee /etc/yum.repos.d/sensu-enterprise.repo
+
+# Add the Sensu Enterprise Dashboard YUM repository
+echo "[sensu-enterprise-dashboard]
+name=sensu-enterprise-dashboard
+baseurl=http://$SE_USER:$SE_PASS@enterprise.sensuapp.com/yum/\$basearch/
+gpgcheck=0
+enabled=1" | tee /etc/yum.repos.d/sensu-enterprise-dashboard.repo
+
 fi
 
 # Add the InfluxDB YUM repository
@@ -48,17 +89,20 @@ systemctl disable firewalld
 # Install Needed Yum Packages
 yum install -q -y ca-certificates curl jq nc vim ntp redis influxdb grafana nagios-plugins-ssh
 
+cd $HOME
+cp /vagrant_files/.bash_profile /home/vagrant/
+echo $PWD
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
   # Install Sensu and Uchiwa
   echo "install sensu CC"
-  echo 'export PS1="sensu_CC_sandbox $ "' >> ~/.bash_profile
+  echo 'export PS1="sensu_CC_sandbox $ "' >> /home/vagrant/.bash_profile
   yum install -q -y sensu uchiwa 
 else
   # If Enterprise
   # install Sensu and Dashboard
   echo "install sensu CE"
-  echo 'export PS1="sensu_CE_sandbox $ "' >> ~/.bash_profile
+  echo 'export PS1="sensu_CE_sandbox $ "' >> /home/vagrant/.bash_profile
   yum install -q -y sensu-enterprise sensu-enterprise-dashboard
 fi
 

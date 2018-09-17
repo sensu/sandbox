@@ -86,7 +86,7 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 # Install Needed Yum Packages
-yum install -q -y ca-certificates curl jq nc vim ntp redis influxdb grafana nagios-plugins-ssh
+yum install -q -y ca-certificates sensu curl jq nc vim ntp redis influxdb grafana nagios-plugins-ssh
 
 
 cd $HOME
@@ -96,7 +96,7 @@ if [ -z ${SE_USER+x} ]; then
   # Install Sensu and Uchiwa
   echo "Installing Sensu Classic Core"
   echo 'export PS1="sensu_CC_sandbox $ "' >> /home/vagrant/.bash_profile
-  yum install -q -y sensu uchiwa 
+  yum install -q -y uchiwa 
 else
   # If Enterprise
   # install Sensu and Dashboard

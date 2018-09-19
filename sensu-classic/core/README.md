@@ -7,9 +7,7 @@ This tutorial will get you up and running with Sensu.
 - [Lesson \#2: Create an event pipeline](#lesson-2-pipe-events-into-slack)
 - [Lesson \#3: Automate event production with the Sensu client](#lesson-3-automate-event-production-with-the-sensu-client)
 
-We'd love to hear your feedback!
-While this sandbox is internal to Sensu, please add feedback to this [GoogleDoc](https://docs.google.com/document/d/1HSIkd3wO6ulAiya3aWB6MjCReYwLdkKIrY4_d4BkFfo/edit#).
-
+Report issues or share feedback by [opening an issue in this repo](https://github.com/sensu/sandbox/issues/new).
 ---
 
 ## Set up the sandbox
@@ -36,7 +34,7 @@ Then open Terminal and enter `cd Documents` followed by `cd sandbox/sensu-classi
 ENABLE_SENSU_SANDBOX_PORT_FORWRDING=1 vagrant up
 ```
 
-This will take around five minutes, so if you haven't already, [read about how Sensu works](https://docs.sensu.io/sensu-core/1.4/overview/architecture) or see the [appendix](#appendix) for details about the sandbox.
+This will take around five minutes, so if you haven't already, [read about how Sensu works](https://docs.sensu.io/sensu-core/latest/overview/architecture) or see the [appendix](#appendix-sandbox-architecture) for details about the sandbox.
 
 _NOTE: This will configure VirtualBox to forward a couple of tcp ports (3000,4000) from the sandbox VM machine to the localhost to make it easier for you to interact with the Sensu installation._
 

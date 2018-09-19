@@ -36,7 +36,7 @@ ENABLE_SENSU_SANDBOX_PORT_FORWRDING=1 vagrant up
 
 This will take around five minutes, so if you haven't already, [read about how Sensu works](https://docs.sensu.io/sensu-core/latest/overview/architecture) or see the [appendix](#appendix-sandbox-architecture) for details about the sandbox.
 
-_NOTE: This will configure VirtualBox to forward a couple of tcp ports (3000,4000) from the sandbox VM machine to the localhost to make it easier for you to interact with the Sensu installation._
+_NOTE: This will configure VirtualBox to forward a couple of tcp ports (3000,4000) from the sandbox VM machine to the localhost to make it easier for you to interact with the Sandbox dashboards. Dashboard links provided below assume port forwarding from the VM to the host is active and reference http://localhost ._
 
 **4. SSH into the sandbox:**
 
@@ -144,7 +144,7 @@ _NOTE: The events API returns only warning (`"status": 1`) and critical (`"statu
 Event data contains information about the part of your system the event came from (the `client` or `source`), the result of the check (including a `history` of recent `status` results), and the event itself (including the number of `occurrences`).
 
 In this example, the event data tells us that this is a warning-level alert (`"status": 1`) created while monitoring curl times on `docs.sensu.io`.
-We can also see the alert and the client in the [dashboard event view](http://172.31.255.4:3000/#/events) and [client view](http://172.31.255.4:3000/#/clients).
+We can also see the alert and the client in the [dashboard event view](http://localhost:3000/#/events) and [client view](http://localhost:3000/#/clients).
 
 ```json
 $ curl -s http://localhost:4567/events | jq .
@@ -202,7 +202,7 @@ curl -s -XPOST -H 'Content-Type: application/json' \
 http://localhost:4567/results
 ```
 
-After a few seconds, we can check the [dashboard client view](http://172.31.255.4:3000/#/clients) and see that there are no active alerts and that the client is healthy.
+After a few seconds, we can check the [dashboard client view](http://localhost:3000/#/clients) and see that there are no active alerts and that the client is healthy.
 
 _NOTE: The dashboard auto-refreshes every 10 seconds._
 
@@ -220,7 +220,7 @@ curl -s -XPOST -H 'Content-Type: application/json' \
 http://localhost:4567/clients
 ```
 
-You can see the new `environment` and `playbook` attributes in the [dashboard client view](http://172.31.255.4:3000/#/clients) or using the clients API:
+You can see the new `environment` and `playbook` attributes in the [dashboard client view](http://localhost:3000/#/clients) or using the clients API:
 
 ```
 curl -s http://localhost:4567/clients | jq .
@@ -456,7 +456,7 @@ curl -s -XPOST -H 'Content-Type: application/json' \
 http://localhost:4567/results
 ```
 
-We shouldn't see anything in Slack, but we should see an alert in the [dashboard events view](http://172.31.255.4:3000/#/events).
+We shouldn't see anything in Slack, but we should see an alert in the [dashboard events view](http://localhost:3000/#/events).
 
 Now let's create a production alert:
 
@@ -627,10 +627,10 @@ $ curl -s http://localhost:4567/clients | jq .
 ]
 ```
 
-In the [dashboard client view](http://172.31.255.4:3000/#/clients), we can see that the client running in the sandbox is executing keepalive checks.
+In the [dashboard client view](http://localhost:3000/#/clients), we can see that the client running in the sandbox is executing keepalive checks.
 
 _NOTE: The client gets its name from the `sensu.name` attribute configured as part of sandbox setup.
-You can change the client name using `sudo nano /etc/sensu/uchiwa.json`._
+You can change the client name using `sudo nano /etc/sensu/config.d/client.json`._
 
 **3. Add a client subscription**
 
@@ -738,7 +738,7 @@ $ curl -s http://localhost:4567/settings | jq .
 }
 ```
 
-**6. See the HTTP response code events for Nginx in [Grafana](http://172.31.255.4:4000/d/core01/sensu-core-sandbox).**
+**6. See the HTTP response code events for Nginx in [Grafana](http://localhost:4000/d/core01/sensu-core-sandbox).**
 
 Log in to Grafana as username: `admin` password: `admin`.
 We should see a graph of real HTTP response codes for Nginx.
@@ -833,7 +833,7 @@ $ curl -s http://localhost:4567/settings | jq .
 }
 ```
 
-Now we should be able to see disk usage metrics for the sandbox in [Grafana](http://172.31.255.4:4000/d/core02/sensu-core-sandbox-combined).
+Now we should be able to see disk usage metrics for the sandbox in [Grafana](http://localhost:4000/d/core02/sensu-core-sandbox-combined).
 
 You made it! You're ready for the next level of Sensu-ing.
 Here are some resources to help continue your journey:

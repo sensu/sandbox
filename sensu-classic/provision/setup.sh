@@ -105,7 +105,7 @@ else
   # install Sensu and Dashboard
   echo "Installing Sensu Classic Enterprise"
   echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_classic_enterprise_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
-  yum install -q -y sensu-enterprise sensu-enterprise-dashboard
+  yum install -q -y sensu sensu-enterprise sensu-enterprise-dashboard
 fi
 
 

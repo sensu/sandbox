@@ -45,10 +45,10 @@ Vagrant.configure("2") do |config|
       sandbox.vm.network "forwarded_port", guest: 8080, host: 8080
       sandbox.vm.network "forwarded_port", guest: 8081, host: 8081
 
-      # Forward Sensu Dashboard to localhost 3001
-      sandbox.vm.network "forwarded_port", guest: 3000, host: 3001
-      # Forward Grafana Dashboard to localhost 4001
-      sandbox.vm.network "forwarded_port", guest: 4000, host: 4001
+      # Forward Sensu Dashboard to localhost 3002 -> Non conflicting with sensu classic sandbox
+      sandbox.vm.network "forwarded_port", guest: 3000, host: 3002
+      # Forward Grafana Dashboard to localhost 4002 -> Non clonficting with sensu classic sandbox
+      sandbox.vm.network "forwarded_port", guest: 4000, host: 4002
 
       envvars["ENABLE_SENSU_SANDBOX_PORT_FORWRDING"] = ENV['ENABLE_SENSU_SANDBOX_PORT_FORWRDING']
     end 

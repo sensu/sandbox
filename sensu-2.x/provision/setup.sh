@@ -52,8 +52,10 @@ fi
 if [ -z ${ENABLE_SENSU_NIGHTLY+x} ]; then
   # Using beta for now... after GA this will move to using releases
   curl -s https://packagecloud.io/install/repositories/sensu/beta/script.rpm.sh | bash
+  REPO="beta"
 else
   curl -s https://packagecloud.io/install/repositories/sensu/nightly/script.rpm.sh | bash
+  REPO="nightly"
 fi
 
 # Set up Sensu's repository
@@ -111,10 +113,11 @@ cd $HOME
 cp /vagrant_files/.bash_profile /home/vagrant/
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
-  echo 'export PS1="sensu_2C_sandbox $ "' >> /home/vagrant/.bash_profile
+  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_2_core_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
+
 #else
 #  # If Enterprise
-#  echo 'export PS1="sensu_2E_sandbox $ "' >> /home/vagrant/.bash_profile
+#  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_2_enterprise_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
 fi
 
 # Set grafana to port 4000 to not conflict with uchiwa dashboard
@@ -168,15 +171,17 @@ curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana
 curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
 
 echo -e "================="
-echo "Sensu $VERSION is now up and running!"
+echo "Sensu 2 $VERSION $REPO Sandbox is now up and running!"
 if [ -z ${ENABLE_SENSU_SANDBOX_PORT_FORWRDING+x} ]; then 
 echo "Port forwarding from the VM to this host is disabled:"
 echo "  Access the dashboard at http://${IPADDR}:3000"
 echo "  Access Grafana at http://${IPADDR}:4000"
+echo "You may need to adjust your VirtualBox network settings to access these URLs"
 else 
 echo "Port forwarding from the VM to this host is enabled:"
-echo "  Access the dashboard at http://localhost:3001"
-echo "  Access Grafana at http://localhost:4001"
+echo "  Access the dashboard at http://localhost:3002"
+echo "  Access Grafana at http://localhost:4002"
+echo "Please check your Virtual Box configuration if you cannot access these URLs"
 fi
 echo "================="
 

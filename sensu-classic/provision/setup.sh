@@ -72,21 +72,24 @@ cp /vagrant_files/etc/yum.repos.d/influxdb.repo /etc/yum.repos.d/influxdb.repo
 cp /vagrant_files/etc/yum.repos.d/grafana.repo /etc/yum.repos.d/grafana.repo
 
 # Add the EPEL repositories (for installing Redis)
+echo "Adding EPEL package repository"
 [[ "$(rpm -qa | grep epel-release)" ]] || rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
 
 # Import GPG keys
-cd /tmp
-
-curl -s -O https://repos.influxdata.com/influxdb.key
-curl -s -O https://packagecloud.io/gpg.key
-curl -s -O https://grafanarel.s3.amazonaws.com/RPM-GPG-KEY-grafana
-cp influxdb.key gpg.key RPM-GPG-KEY-grafana /etc/pki/rpm-gpg/
+echo "Importing GPG keys for package signatures"
+rpm --import https://repos.influxdata.com/influxdb.key
+rpm --import https://packagecloud.io/gpg.key
+rpm --import https://grafanarel.s3.amazonaws.com/RPM-GPG-KEY-grafana
+rpm --import http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
 
 systemctl stop firewalld
 systemctl disable firewalld
 
 # Install Needed Yum Packages
-yum install -q -y ca-certificates sensu curl jq nc vim ntp redis influxdb grafana nagios-plugins-ssh
+echo "Installing needed rpm packages with yum"
+yum install -q -y ca-certificates curl jq nc vim ntp redis influxdb grafana nagios-plugins-ssh
+yum groupinstall -q -y "Development Tools"
+yum install -q -y https://dl.bintray.com/rabbitmq/rabbitmq-server-rpm/rabbitmq-server-3.6.12-1.el7.noarch.rpm
 
 
 cd $HOME
@@ -95,23 +98,21 @@ if [ -z ${SE_USER+x} ]; then
   # If Core:
   # Install Sensu and Uchiwa
   echo "Installing Sensu Classic Core"
-  echo 'export PS1="sensu_CC_sandbox $ "' >> /home/vagrant/.bash_profile
-  yum install -q -y uchiwa 
+  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_classic_core_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
+  yum install -q -y sensu uchiwa 
 else
   # If Enterprise
   # install Sensu and Dashboard
   echo "Installing Sensu Classic Enterprise"
-  echo 'export PS1="sensu_CE_sandbox $ "' >> /home/vagrant/.bash_profile
-  yum install -q -y sensu-enterprise sensu-enterprise-dashboard
+  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_classic_enterprise_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
+  yum install -q -y sensu sensu-enterprise sensu-enterprise-dashboard
 fi
 
-# Update Redis "bind" and "protected-mode" configs to allow external connections
-sed -i 's/^bind 127.0.0.1/bind 0.0.0.0/' /etc/redis.conf
-sed -i 's/^protected-mode yes/protected-mode no/' /etc/redis.conf
 
 # Set grafana to port 4000 to not conflict with uchiwa dashboard
 sed -i 's/^;http_port = 3000/http_port = 4000/' /etc/grafana/grafana.ini
 
+echo "Configuring Sensu"
 # Copy Base Sensu configuration files
 cp -r /vagrant_files/etc/sensu/* /etc/sensu/
 cd /etc/sensu/conf.d
@@ -127,6 +128,13 @@ fi
 # General Clean up of Sensu configuration 
 chown -R sensu:sensu /etc/sensu
 
+echo "Configuring services"
+# Going to do some general setup stuff
+
+# Update Redis "bind" and "protected-mode" configs to allow external connections
+sed -i 's/^bind 127.0.0.1/bind 0.0.0.0/' /etc/redis.conf
+sed -i 's/^protected-mode yes/protected-mode no/' /etc/redis.conf
+
 # Copy Grafana configs
 cp -r /vagrant_files/etc/grafana/* /etc/grafana/
 chown -R grafana:grafana /etc/grafana
@@ -136,20 +144,48 @@ chown -R grafana:grafana /var/lib/grafana
 rm /etc/influxdb/influxdb.conf
 cp /vagrant_files/etc/influxdb/influxdb.conf /etc/influxdb/influxdb.conf
 
-# Going to do some general setup stuff
+# Start up rabbitmq services
+systemctl start rabbitmq-server
+systemctl enable rabbitmq-server 
+
+# reset rabbit
+rabbitmqctl stop_app
+rabbitmqctl reset    # Be sure you really want to do this!
+rabbitmqctl start_app
+
+# Add rabbitmq vhost configurations
+rabbitmqctl add_vhost /sensu
+rabbitmqctl add_user sensu secret
+rabbitmqctl set_permissions -p /sensu sensu ".*" ".*" ".*"
 
 #Start up redis 
-sudo systemctl restart redis.service
-sudo systemctl enable redis.service
+systemctl restart redis.service
+systemctl enable redis.service
 
 # Flush redis
 redis-cli FLUSHALL
 
+systemctl restart influxdb
+systemctl enable influxdb 
+systemctl restart grafana-server
+systemctl enable grafana-server
+
+echo "Creating InfluxDB database"
+# Create the InfluxDB database
+influx -execute "DROP DATABASE sensu;"
+influx -execute "CREATE DATABASE sensu;"
+
+echo "Creating Grafana dashboards"
+# Create two Grafana dashboards
+curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+
+echo "Starting Sensu Services"
 if [ -z ${SE_USER+x} ]; then 
-  sudo systemctl restart sensu-{server,api}.service
-  sudo systemctl enable sensu-{server,api}.service
-  sudo systemctl restart uchiwa
-  sudo chkconfig uchiwa on
+  systemctl restart sensu-{server,api}.service
+  systemctl enable sensu-{server,api}.service
+  systemctl restart uchiwa
+  chkconfig uchiwa on
 else
   systemctl restart sensu-enterprise
   systemctl enable sensu-enterprise
@@ -157,18 +193,7 @@ else
   systemctl enable sensu-enterprise-dashboard
 fi
 
-systemctl restart influxdb
-systemctl enable influxdb 
-systemctl restart grafana-server
-systemctl enable grafana-server
 
-# Create the InfluxDB database
-influx -execute "DROP DATABASE sensu;"
-influx -execute "CREATE DATABASE sensu;"
-
-# Create two Grafana dashboards
-curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
-curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
 
 echo -e "================="
 echo "Sensu $VERSION is now up and running!"

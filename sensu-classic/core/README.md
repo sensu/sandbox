@@ -8,6 +8,7 @@ This tutorial will get you up and running with Sensu.
 - [Lesson \#3: Automate event production with the Sensu client](#lesson-3-automate-event-production-with-the-sensu-client)
 
 Report issues or share feedback by [opening an issue in this repo](https://github.com/sensu/sandbox/issues/new).
+
 ---
 
 ## Set up the sandbox
@@ -24,9 +25,6 @@ Report issues or share feedback by [opening an issue in this repo](https://githu
 ```
 git clone git@github.com:sensu/sandbox.git && cd sandbox/sensu-classic/core
 ```
-
-If you downloaded the zip file from GitHub, unzip the folder and move it into your Documents folder.
-Then open Terminal and enter `cd Documents` followed by `cd sandbox/sensu-classic/core`.
 
 **3. Start Vagrant:**
 
@@ -47,8 +45,9 @@ vagrant ssh
 ```
 
 You should now have shell access to the sandbox and should be greeted with this sandbox prompt:  
+
 ```
-sensu_CC_sandbox $
+[sensu_classic_core_sandbox]$
 ```
 
 _NOTE: To exit out of the sandbox, use `CTRL`+`D`.  
@@ -425,14 +424,14 @@ $ curl -s http://localhost:4567/settings | jq .
 {
   "...": "...",
   "filters": {
-    "only_production": {
-      "attributes": {
-        "check": {
-          "status": 2
-        }
-      }
-    }
-  },
+     "only_production": {
+       "attributes": {
+         "check": {
+           "environment": "production"
+         }
+       }
+     }
+   },
   "...": "..."
 }
 ```
@@ -628,9 +627,6 @@ $ curl -s http://localhost:4567/clients | jq .
 ```
 
 In the [dashboard client view](http://localhost:3000/#/clients), we can see that the client running in the sandbox is executing keepalive checks.
-
-_NOTE: The client gets its name from the `sensu.name` attribute configured as part of sandbox setup.
-You can change the client name using `sudo nano /etc/sensu/config.d/client.json`._
 
 **3. Add a client subscription**
 

@@ -26,9 +26,6 @@ Report issues or share feedback by [opening an issue in this repo](https://githu
 git clone git@github.com:sensu/sandbox.git && cd sandbox/
 ```
 
-If you downloaded the zip file from GitHub, unzip the folder and move it into your Documents folder.
-Then open Terminal and enter `cd Documents` followed by `cd sandbox`.
-
 **3. Add your Sensu Enterprise username and password**
 
 [Sign up for a free trial of Sensu Enterprise](https://account.sensu.io/users/sign_up?plan=gold), and get your access credentials from the [Sensu account manager](https://account.sensu.io/).
@@ -54,12 +51,12 @@ vagrant ssh
 ```
 
 You should now have shell access to the sandbox and should be greeted with this sandbox prompt:
+
 ```
-sensu_CE_sandbox $
+[sensu_classic_enterprise_sandbox] $
 ```
 
-`CE` stands for Classic Enterprise. If you see a different prompt you may need to go back and make sure the the SE_USER and SE_PASS variables are set 
----
+If you see a different prompt you may need to go back and make sure the the SE_USER and SE_PASS variables are set.
 
 ## Lesson \#1: Create a monitoring event
 
@@ -72,7 +69,7 @@ curl -s http://localhost:4567/settings | jq .
 ```
 
 With the Sensu Enterprise server, we can see that we have no active clients, and that Sensu is using RabbitMQ as the transport and Redis as the datastore.
-We can see a lot of this same information in the [dashboard datacenter view](http://172.31.255.3:3000/#/datacenters).
+We can see a lot of this same information in the [dashboard datacenter view](http://localhost:3000/#/datacenters).
 
 ```json
 $ curl -s http://localhost:4567/settings | jq .
@@ -144,7 +141,7 @@ _NOTE: The events API returns only warning (`"status": 1`) and critical (`"statu
 Event data contains information about the part of your system the event came from (the `client` or `source`), the result of the check (including a `history` of recent `status` results), and the event itself (including the number of `occurrences`).
 
 This event's data tells us that this is a warning-level alert (`"status": 1`) created while monitoring curl times on `docs.sensu.io`.
-We can also see the alert and the client in the [dashboard event view](http://172.31.255.3:3000/#/events) and [client view](http://172.31.255.3:3000/#/clients).
+We can also see the alert and the client in the [dashboard event view](http://localhost:3000/#/events) and [client view](http://localhost:3000/#/clients).
 
 ```json
 $ curl -s http://localhost:4567/events | jq .
@@ -202,7 +199,7 @@ curl -s -XPOST -H 'Content-Type: application/json' \
 http://localhost:4567/results
 ```
 
-In the [dashboard client view](http://172.31.255.3:3000/#/clients), we can see that there are no active alerts and that the client is healthy.
+In the [dashboard client view](http://localhost:3000/#/clients), we can see that there are no active alerts and that the client is healthy.
 
 _NOTE: The dashboard auto-refreshes every 10 seconds._
 
@@ -220,7 +217,7 @@ curl -s -XPOST -H 'Content-Type: application/json' \
 http://localhost:4567/clients
 ```
 
-We can see the new `playbook` attribute in the [dashboard client view](http://172.31.255.3:3000/#/clients) or using the clients API:
+We can see the new `playbook` attribute in the [dashboard client view](http://localhost:3000/#/clients) or using the clients API:
 
 ```
 curl -s http://localhost:4567/clients | jq .
@@ -393,7 +390,7 @@ curl -s -XPOST -H 'Content-Type: application/json' \
 http://localhost:4567/results
 ```
 
-We shouldn't see anything in Slack, but we should see an alert in the [dashboard events view](http://172.31.255.3:3000/#/events).
+We shouldn't see anything in Slack, but we should see an alert in the [dashboard events view](http://localhost:3000/#/events).
 
 Now let's create a critical alert:
 
@@ -463,10 +460,7 @@ $ curl -s http://localhost:4567/clients | jq .
 ]
 ```
 
-In the [dashboard client view](http://172.31.255.3:3000/#/clients), we can see that the client running in the sandbox is executing keepalive checks.
-
-_NOTE: The client gets its name from the `sensu.name` attribute configured as part of sandbox setup.
-You can change the client name using `sudo nano /etc/sensu/dashboard.json`._
+In the [dashboard client view](http://localhost:3000/#/clients), we can see that the client running in the sandbox is executing keepalive checks.
 
 **2. Add a client subscription**
 
@@ -664,7 +658,7 @@ $ curl -s http://localhost:4567/settings | jq .
 }
 ```
 
-**6. See the HTTP response code events for Nginx in [Grafana](http://172.31.255.3:4000/d/enterprise01/sensu-enterprise-sandbox).**
+**6. See the HTTP response code events for Nginx in [Grafana](http://localhost:4000/d/enterprise01/sensu-enterprise-sandbox).**
 
 Log in to Grafana as username: `admin` password: `admin`.
 We should see a graph of real HTTP response codes for Nginx.
@@ -759,7 +753,7 @@ $ curl -s http://localhost:4567/settings | jq .
 }
 ```
 
-Now we should be able to see disk usage metrics for the sandbox in [Grafana](http://172.31.255.3:4000/d/enterprise02/sensu-enterprise-sandbox-combined).
+Now we should be able to see disk usage metrics for the sandbox in [Grafana](http://localhost:4000/d/enterprise02/sensu-enterprise-sandbox-combined).
 
 You made it! You're ready for the next level of Sensu-ing.
 Here are some resources to help continue your journey:

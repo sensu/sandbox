@@ -29,7 +29,7 @@ git clone git@github.com:sensu/sandbox.git && cd sandbox/sensu-classic/core
 **3. Start Vagrant:**
 
 ```
-ENABLE_SENSU_SANDBOX_PORT_FORWRDING=1 vagrant up
+ENABLE_SENSU_SANDBOX_PORT_FORWARDING=1 vagrant up
 ```
 
 This will take around five minutes, so if you haven't already, [read about how Sensu works](https://docs.sensu.io/sensu-core/latest/overview/architecture) or see the [appendix](#appendix-sandbox-architecture) for details about the sandbox.

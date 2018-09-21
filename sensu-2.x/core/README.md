@@ -28,7 +28,7 @@ Then open Terminal and enter `cd Documents` followed by `cd sandbox/sensu-2.x/co
 **3. Start Vagrant:**
 
 ```
-ENABLE_SENSU_SANDBOX_PORT_FORWRDING=1 vagrant up
+ENABLE_SENSU_SANDBOX_PORT_FORWARDING=1 vagrant up
 ```
 
 This will take around five minutes, so if you haven't already, [read about how Sensu works](https://docs.sensu.io/sensu-core/2.0/).

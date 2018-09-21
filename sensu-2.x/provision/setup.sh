@@ -19,8 +19,8 @@ if [ ! -f $HOME/.vagrant_env ] ; then
     echo "SE_PASS=${SE_PASS}" >> $HOME/.vagrant_env
   fi
 
-  if [ ! -z ${ENABLE_SENSU_SANDBOX_PORT_FORWRDING+x} ]; then
-    echo "ENABLE_SENSU_SANDBOX_PORT_FORWRDING=${ENABLE_SENSU_SANDBOX_PORT_FORWRDING}" >> $HOME/.vagrant_env
+  if [ ! -z ${ENABLE_SENSU_SANDBOX_PORT_FORWARDING+x} ]; then
+    echo "ENABLE_SENSU_SANDBOX_PORT_FORWARDING=${ENABLE_SENSU_SANDBOX_PORT_FORWARDING}" >> $HOME/.vagrant_env
   fi
   if [ ! -z ${ENABLE_SENSU_NIGHTLY+x} ]; then
     echo "ENABLE_SENSU_NIGHTLY=${ENABLE_SENSU_NIGHTLY}" >> $HOME/.vagrant_env
@@ -30,7 +30,7 @@ fi
 if [ -f $HOME/.vagrant_env ] ; then
   source $HOME/.vagrant_env
   echo "Using saved provisioning state:"
-  echo "ENABLE_SENSU_SANDBOX_PORT_FORWRDING=${ENABLE_SENSU_SANDBOX_PORT_FORWRDING}"
+  echo "ENABLE_SENSU_SANDBOX_PORT_FORWARDING=${ENABLE_SENSU_SANDBOX_PORT_FORWARDING}"
   echo "ENABLE_SENSU_NIGHTLY=${ENABLE_SENSU_NIGHTLY}"
   echo "SHARED_SENSU_DIR=${SHARED_SENSU_DIR}"
   echo "SE_USER=${SE_USER}" 
@@ -172,7 +172,7 @@ curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana
 
 echo -e "================="
 echo "Sensu 2 $VERSION $REPO Sandbox is now up and running!"
-if [ -z ${ENABLE_SENSU_SANDBOX_PORT_FORWRDING+x} ]; then 
+if [ -z ${ENABLE_SENSU_SANDBOX_PORT_FORWARDING+x} ]; then 
 echo "Port forwarding from the VM to this host is disabled:"
 echo "  Access the dashboard at http://${IPADDR}:3000"
 echo "  Access Grafana at http://${IPADDR}:4000"

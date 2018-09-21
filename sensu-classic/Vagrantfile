@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
     end
     
     # Create forwarded port mapping which allows host access to specific sandbox ports
-    if ENV['ENABLE_SENSU_SANDBOX_PORT_FORWRDING'] 
+    if ENV['ENABLE_SENSU_SANDBOX_PORT_FORWARDING'] 
       # Forward Sensu API and redis transport to localhost
       sandbox.vm.network "forwarded_port", guest: 6379, host: 6379
       sandbox.vm.network "forwarded_port", guest: 4567, host: 4567
@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
       sandbox.vm.network "forwarded_port", guest: 3000, host: 3000
       # Forward Grafana Dashboard to localhost 3001
       sandbox.vm.network "forwarded_port", guest: 4000, host: 4000
-      envvars["ENABLE_SENSU_SANDBOX_PORT_FORWRDING"] = ENV['ENABLE_SENSU_SANDBOX_PORT_FORWRDING']
+      envvars["ENABLE_SENSU_SANDBOX_PORT_FORWARDING"] = ENV['ENABLE_SENSU_SANDBOX_PORT_FORWARDING']
     end 
 
     

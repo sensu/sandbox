@@ -40,10 +40,10 @@ Vagrant.configure("2") do |config|
     # Create forwarded port mapping which allows host access to specific sandbox ports
     if ENV['ENABLE_SENSU_SANDBOX_PORT_FORWRDING'] 
       # Forward Sensu backend APIs
-      sandbox.vm.network "forwarded_port", guest: 2379, host: 2379
-      sandbox.vm.network "forwarded_port", guest: 2380, host: 2380
-      sandbox.vm.network "forwarded_port", guest: 8080, host: 8080
-      sandbox.vm.network "forwarded_port", guest: 8081, host: 8081
+      #sandbox.vm.network "forwarded_port", guest: 2379, host: 2379
+      #sandbox.vm.network "forwarded_port", guest: 2380, host: 2380
+      #sandbox.vm.network "forwarded_port", guest: 8080, host: 8080
+      #sandbox.vm.network "forwarded_port", guest: 8081, host: 8081
 
       # Forward Sensu Dashboard to localhost 3002 -> Non conflicting with sensu classic sandbox
       sandbox.vm.network "forwarded_port", guest: 3000, host: 3002

@@ -106,7 +106,24 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 # Install Needed Yum Packages
-yum install -q -y ca-certificates sensu-backend curl jq nc vim ntp redis influxdb grafana nagios-plugins-ssh
+yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc vim ntp redis influxdb grafana nagios-plugins-load
+
+yum groupinstall "Development Tools"
+
+# Install rvm and setup ruby 2.4.2 rvm provided binary
+yum install patch, autoconf, automake, bison, gcc-c++, libffi-devel, libtool, patch, readline-devel, sqlite-devel, zlib-devel, glibc-headers, glibc-devel, openssl-devel, libyaml
+
+
+curl -sSL https://get.rvm.io | bash
+curl -sSL https://get.rvm.io | bash -s stable --ruby
+/usr/local/rvm/bin/rvm rvmrc warning ignore allGemfiles
+/usr/local/rvm/bin/rvm install ruby 2.4.2
+
+usermod -a -G rvm sensu
+usermod -a -G rvm vagrant 
+
+sudo -i -u sensu rvm --default use ruby 2.4.2
+sudo -i -u vagrant rvm --default use ruby 2.4.2
 
 
 cd $HOME
@@ -125,7 +142,8 @@ sed -i 's/^;http_port = 3000/http_port = 4000/' /etc/grafana/grafana.ini
 
 # Copy Base Sensu configuration files
 cp -r /vagrant_files/etc/sensu/* /etc/sensu/
-
+cp  /vagrant_files/etc/sysconfig/sensu-backend /etc/sysconfig
+cp  /vagrant_files/etc/sysconfig/sensu-agent /etc/sysconfig
 # Copy Lesson specific configs.
 if [ -z ${SANDBOX_LESSON+x} ]; then 
   echo "Using Base Sensu ${VER} Sandbox provisioning"
@@ -133,8 +151,13 @@ else
   echo "Using Sensu ${VER} Sandbox Lesson ${SANDBOX_LESSON} provisioning"
 fi
 
+# Setup sensu user to be able to make use for rvm installed ruby
+chsh -s /bin/bash sensu
+
 # General Clean up of Sensu configuration 
+mkdir -p /opt/sensu
 chown -R sensu:sensu /etc/sensu
+chown -R sensu:sensu /opt/sensu
 
 # Copy Grafana configs
 cp -r /vagrant_files/etc/grafana/* /etc/grafana/

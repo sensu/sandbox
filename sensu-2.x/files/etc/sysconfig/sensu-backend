@@ -1,0 +1,10 @@
+rvm_bin_path=/usr/local/rvm/bin
+GEM_HOME=/usr/local/rvm/gems/ruby-2.4.2
+IRBRC=/usr/local/rvm/rubies/ruby-2.4.2/.irbrc
+MY_RUBY_HOME=/usr/local/rvm/rubies/ruby-2.4.2
+rvm_path=/usr/local/rvm
+rvm_prefix=/usr/local
+PATH=/usr/local/rvm/gems/ruby-2.4.2/bin:/usr/local/rvm/gems/ruby-2.4.2@global/bin:/usr/local/rvm/rubies/ruby-2.4.2/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/usr/local/rvm/bin:/home/vagrant/.local/bin:/home/vagrant/bin
+rvm_version=1.29.4 (master)
+GEM_PATH=/usr/local/rvm/gems/ruby-2.4.2:/usr/local/rvm/gems/ruby-2.4.2@global
+

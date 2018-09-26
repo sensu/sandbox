@@ -106,12 +106,12 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 # Install Needed Yum Packages
-yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc vim ntp redis influxdb grafana nagios-plugins-load
+yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc vim ntp influxdb grafana nagios-plugins-load 
 
-yum groupinstall "Development Tools"
+yum -q -y groupinstall "Development Tools"
 
 # Install rvm and setup ruby 2.4.2 rvm provided binary
-yum install patch, autoconf, automake, bison, gcc-c++, libffi-devel, libtool, patch, readline-devel, sqlite-devel, zlib-devel, glibc-headers, glibc-devel, openssl-devel, libyaml
+yum install -q -y patch autoconf automake bison gcc-c++ libffi-devel libtool readline-devel sqlite-devel zlib-devel glibc-headers glibc-devel openssl-devel libyaml libyaml-devel
 
 
 curl -sSL https://get.rvm.io | bash
@@ -192,6 +192,10 @@ influx -execute "CREATE DATABASE sensu;"
 # Create two Grafana dashboards
 curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
 curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+
+# setup sensuctl
+echo -e "Configure sensuctl"
+sudo -u vagrant sensuctl configure -n  --username "admin" --password 'P@ssw0rd!' --url "http://127.0.0.1:8080"  
 
 echo -e "================="
 echo "Sensu 2 $VERSION $REPO Sandbox is now up and running!"

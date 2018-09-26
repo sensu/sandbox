@@ -63,7 +63,7 @@ Vagrant.configure("2") do |config|
       envvars["SHARED_SENSU_DIR"] = ENV['SHARED_SENSU_DIR'] 
     end
 
-    if ENV['ENABLE_SENSU_NIGHTYLY']
+    if ENV['ENABLE_SENSU_NIGHTLY']
       envvars["ENABLE_SENSU_NIGHTLY"] = ENV['ENABLE_SENSU_NIGHTLY']
     end
 

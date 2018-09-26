@@ -110,6 +110,11 @@ yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc
 
 yum -q -y groupinstall "Development Tools"
 
+# Setup sensu user to be able to make use for rvm installed ruby
+mkdir -p /opt/sensu
+chown -R sensu:sensu /opt/sensu
+chsh -s /bin/bash sensu
+
 # Install rvm and setup ruby 2.4.2 rvm provided binary
 yum install -q -y patch autoconf automake bison gcc-c++ libffi-devel libtool readline-devel sqlite-devel zlib-devel glibc-headers glibc-devel openssl-devel libyaml libyaml-devel
 
@@ -151,13 +156,9 @@ else
   echo "Using Sensu ${VER} Sandbox Lesson ${SANDBOX_LESSON} provisioning"
 fi
 
-# Setup sensu user to be able to make use for rvm installed ruby
-chsh -s /bin/bash sensu
 
 # General Clean up of Sensu configuration 
-mkdir -p /opt/sensu
 chown -R sensu:sensu /etc/sensu
-chown -R sensu:sensu /opt/sensu
 
 # Copy Grafana configs
 cp -r /vagrant_files/etc/grafana/* /etc/grafana/

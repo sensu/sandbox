@@ -1,4 +1,4 @@
-### Welcome to the Sensu Classic Core sandbox!
+### Welcome to the Sensu Core sandbox!
 
 This tutorial will get you up and running with Sensu.
 
@@ -23,7 +23,7 @@ Report issues or share feedback by [opening an issue in this repo](https://githu
 [Download from GitHub](https://github.com/sensu/sandbox/archive/core.zip) or clone the repository:
 
 ```
-git clone git@github.com:sensu/sandbox.git && cd sandbox/sensu-classic/core
+git clone git@github.com:sensu/sandbox.git && cd sandbox/sensu/core
 ```
 
 **3. Start Vagrant:**
@@ -47,7 +47,7 @@ vagrant ssh
 You should now have shell access to the sandbox and should be greeted with this sandbox prompt:  
 
 ```
-[sensu_classic_core_sandbox]$
+[sensu_core_sandbox]$
 ```
 
 _NOTE: To exit out of the sandbox, use `CTRL`+`D`.  

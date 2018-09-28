@@ -41,12 +41,12 @@ fi
 
 # Set up Sensu's repository
 if [ -z ${SE_USER+x} ]; then 
-  VERSION="Classic Core"
-  VER="CC"
+  VERSION="Core"
+  VER="Core"
   echo "Preparing Sensu Core Sandbox"
 else
-  VERSION="Classic Enterprise"
-  VER="CE"
+  VERSION="Enterprise"
+  VER="Ent"
   echo "Preparing Sensu Enterprise Sandbox"
 
 # Add the Sensu Enterprise YUM repository

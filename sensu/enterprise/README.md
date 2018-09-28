@@ -33,7 +33,7 @@ git clone git@github.com:sensu/sandbox.git && cd sandbox/
 Then add your Sensu Enterprise username and password to the sandbox:
 
 ```
-cd sensu-classic/enterprise && export SE_USER=REPLACEME && export SE_PASS=REPLACEME
+cd sensu/enterprise && export SE_USER=REPLACEME && export SE_PASS=REPLACEME
 ```
 
 **4. Start Vagrant:**
@@ -53,7 +53,7 @@ vagrant ssh
 You should now have shell access to the sandbox and should be greeted with this sandbox prompt:
 
 ```
-[sensu_classic_enterprise_sandbox] $
+[sensu_enterprise_sandbox] $
 ```
 
 If you see a different prompt you may need to go back and make sure the the SE_USER and SE_PASS variables are set.

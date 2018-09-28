@@ -30,17 +30,17 @@ Vagrant.configure("2") do |config|
   end 
   envvars["SENSU_SANDBOX_TYPE"] = sandbox_type
 
-  config.vm.define "sensu-classic-sandbox-x86-64", default: true, autostart: true do |sandbox|
+  config.vm.define "sensu-sandbox-x86-64", default: true, autostart: true do |sandbox|
     # Bento centos7 box 
     sandbox.vm.box = "bento/centos-7"
 
-    sandbox.vm.hostname = "sensu-classic-sandbox" 
+    sandbox.vm.hostname = "sensu-sandbox" 
 
     # Support virtualbox provider
     sandbox.vm.provider "virtualbox" do |vb, vboxoverride|
       vb.cpus = 2
       vb.memory = 2048
-      vb.name = "sensu-classic-sandbox-x86-64"
+      vb.name = "sensu-sandbox-x86-64"
     end
     
     # Create forwarded port mapping which allows host access to specific sandbox ports

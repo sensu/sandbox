@@ -1,5 +1,5 @@
 ############################################
-#            Sensu Classic Sandbox         #
+#               Sensu Sandbox              #
 ############################################
 #              !!!WARNING!!!               #
 #         NOT FOR PRODUCTION USE           #
@@ -43,11 +43,11 @@ fi
 if [ -z ${SE_USER+x} ]; then 
   VERSION="Classic Core"
   VER="CC"
-  echo "Preparing Sensu Classic Core Sandbox"
+  echo "Preparing Sensu Core Sandbox"
 else
   VERSION="Classic Enterprise"
   VER="CE"
-  echo "Preparing Sensu Classic Enterprise Sandbox"
+  echo "Preparing Sensu Enterprise Sandbox"
 
 # Add the Sensu Enterprise YUM repository
 echo "[sensu-enterprise]
@@ -97,14 +97,14 @@ cp /vagrant_files/.bash_profile /home/vagrant/
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
   # Install Sensu and Uchiwa
-  echo "Installing Sensu Classic Core"
-  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_classic_core_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
+  echo "Installing Sensu Core"
+  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_core_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
   yum install -q -y sensu uchiwa 
 else
   # If Enterprise
   # install Sensu and Dashboard
-  echo "Installing Sensu Classic Enterprise"
-  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_classic_enterprise_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
+  echo "Installing Sensu Enterprise"
+  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_enterprise_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
   yum install -q -y sensu sensu-enterprise sensu-enterprise-dashboard
 fi
 

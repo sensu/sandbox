@@ -87,7 +87,7 @@ systemctl disable firewalld
 
 # Install Needed Yum Packages
 echo "Installing needed rpm packages with yum"
-yum install -q -y ca-certificates curl jq nc vim ntp redis influxdb grafana nagios-plugins-ssh
+yum install -q -y ca-certificates curl jq nano nc vim ntp redis influxdb grafana nagios-plugins-ssh
 yum groupinstall -q -y "Development Tools"
 yum install -q -y https://dl.bintray.com/rabbitmq/rabbitmq-server-rpm/rabbitmq-server-3.6.12-1.el7.noarch.rpm
 

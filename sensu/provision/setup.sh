@@ -96,12 +96,15 @@ cd $HOME
 cp /vagrant_files/.bash_profile /home/vagrant/
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
+  hostnamectl set-hostname sensu-core-sandbox
   # Install Sensu and Uchiwa
   echo "Installing Sensu Core"
   echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_core_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
   yum install -q -y sensu uchiwa 
 else
+
   # If Enterprise
+  hostnamectl set-hostname sensu-enterprise-sandbox
   # install Sensu and Dashboard
   echo "Installing Sensu Enterprise"
   echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_enterprise_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
@@ -177,8 +180,13 @@ influx -execute "CREATE DATABASE sensu;"
 
 echo "Creating Grafana dashboards"
 # Create two Grafana dashboards
-curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
-curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+if [ -z ${SE_USER+x} ]; then 
+  curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+  curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+else
+  curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/ce-dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+  curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/ce-dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+fi
 
 echo "Starting Sensu Services"
 if [ -z ${SE_USER+x} ]; then 

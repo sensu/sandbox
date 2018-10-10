@@ -41,13 +41,18 @@ fi
 
 # Set up Sensu's repository
 if [ -z ${SE_USER+x} ]; then 
+  hostnamectl set-hostname sensu-core-sandbox
+  HOSTNAME=`hostname`
   VERSION="Core"
   VER="Core"
   echo "Preparing Sensu Core Sandbox"
 else
+  hostnamectl set-hostname sensu-enterprise-sandbox
+  HOSTNAME=`hostname`
   VERSION="Enterprise"
   VER="Ent"
   echo "Preparing Sensu Enterprise Sandbox"
+echo "Hostname: $HOSTNAME"
 
 # Add the Sensu Enterprise YUM repository
 echo "[sensu-enterprise]
@@ -96,7 +101,6 @@ cd $HOME
 cp /vagrant_files/.bash_profile /home/vagrant/
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
-  hostnamectl set-hostname sensu-core-sandbox
   # Install Sensu and Uchiwa
   echo "Installing Sensu Core"
   echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_core_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
@@ -104,7 +108,6 @@ if [ -z ${SE_USER+x} ]; then
 else
 
   # If Enterprise
-  hostnamectl set-hostname sensu-enterprise-sandbox
   # install Sensu and Dashboard
   echo "Installing Sensu Enterprise"
   echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_enterprise_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile

@@ -1,7 +1,7 @@
 {
   "sensu": [
     {
-      "name": "sensu-CC-sandbox",
+      "name": "sensu-core-sandbox",
       "host": "127.0.0.1",
       "port": 4567
     }

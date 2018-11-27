@@ -23,7 +23,7 @@ Report issues or share feedback by [opening an issue in this repo](https://githu
 [Download from GitHub](https://github.com/sensu/sandbox/archive/enterprise.zip) or clone the repository:
 
 ```
-git clone git@github.com:sensu/sandbox.git && cd sandbox/
+git clone https://github.com/sensu/sandbox.git && cd sandbox/
 ```
 
 **3. Add your Sensu Enterprise username and password**

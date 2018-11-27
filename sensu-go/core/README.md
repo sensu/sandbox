@@ -1,4 +1,4 @@
-### Welcome to the Sensu Go Core sandbox!
+### Welcome to the Sensu Go sandbox!
 
 This tutorial will get you up and running with Sensu.
 

@@ -133,7 +133,8 @@ sudo -i -u vagrant rvm --default use ruby 2.4.2
 
 cd $HOME
 cp /vagrant_files/.bash_profile /home/vagrant/
-cp /vagrant_files/event.json /home/vagrant/
+cp /vagrant_files/*.json /home/vagrant/
+
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
   echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_2_core_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile

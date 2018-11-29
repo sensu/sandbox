@@ -1,0 +1,22 @@
+{
+  "type": "Handler",
+  "spec": {
+    "metadata": {
+      "name": "keepalive",
+      "namespace": "default",
+      "labels": null,
+      "annotations": null
+    },
+    "type": "pipe",
+    "command": "/usr/local/bin/sensu-slack-handler -c \"${KEEPALIVE_SLACK_CHANNEL}\" -w \"${KEEPALIVE_SLACK_WEBHOOK}\"",
+    "timeout": 0,
+    "handlers": [],
+    "filters": ["is_incident"],
+    "env_vars": [
+      "KEEPALIVE_SLACK_WEBHOOK=https://hooks.slack.com/services/AAA/BBB/CCC",
+      "KEEPALIVE_SLACK_CHANNEL=#sensu-sandbox"
+    ],
+    "runtime_assets": []
+  }
+}
+

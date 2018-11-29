@@ -109,28 +109,25 @@ systemctl disable firewalld
 yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load 
 
 yum -q -y groupinstall "Development Tools"
-
-# Setup sensu user to be able to make use for rvm installed ruby
-mkdir -p /opt/sensu
-chown -R sensu:sensu /opt/sensu
-chsh -s /bin/bash sensu
-
-# Install rvm and setup ruby 2.4.2 rvm provided binary
-yum install -q -y patch autoconf automake bison gcc-c++ libffi-devel libtool readline-devel sqlite-devel zlib-devel glibc-headers glibc-devel openssl-devel libyaml libyaml-devel
-
 wget --content-disposition https://packagecloud.io/sensu/community/packages/el/7/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm/download.rpm
+
 rpm -Uvh /tmp/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm
 
-curl -sSL https://get.rvm.io | bash
-curl -sSL https://get.rvm.io | bash -s stable --ruby
-/usr/local/rvm/bin/rvm rvmrc warning ignore allGemfiles
-/usr/local/rvm/bin/rvm install ruby 2.4.2
+## Setup sensu user to be able to make use for rvm installed ruby
+#mkdir -p /opt/sensu
+#chown -R sensu:sensu /opt/sensu
+#chsh -s /bin/bash sensu
+## Install rvm and setup ruby 2.4.2 rvm provided binary
+#yum install -q -y patch autoconf automake bison gcc-c++ libffi-devel libtool readline-devel sqlite-devel zlib-devel glibc-headers glibc-devel openssl-devel libyaml libyaml-devel
+#curl -sSL https://get.rvm.io | bash
+#curl -sSL https://get.rvm.io | bash -s stable --ruby
+#/usr/local/rvm/bin/rvm rvmrc warning ignore allGemfiles
+#/usr/local/rvm/bin/rvm install ruby 2.4.2
+#usermod -a -G rvm sensu
+#usermod -a -G rvm vagrant 
 
-usermod -a -G rvm sensu
-usermod -a -G rvm vagrant 
-
-sudo -i -u sensu rvm --default use ruby 2.4.2
-sudo -i -u vagrant rvm --default use ruby 2.4.2
+#sudo -i -u sensu rvm --default use ruby 2.4.2
+#sudo -i -u vagrant rvm --default use ruby 2.4.2
 
 
 cd $HOME

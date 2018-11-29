@@ -63,28 +63,94 @@ Use `vagrant provision` to reset sandbox's sensu configuration to the beginning 
 
 ---
 
-## Lesson \#1: Create a monitoring event
+## Lesson \#1: Create an Sensu event
 
-First off, we'll make sure everything is working correctly by creating a few events with the Sensu server and API.
+First off, we'll make sure everything is working correctly by creating a keepalive event with the Sensu agent.
 
 
 **1. Get list of entities:**
+Let's check to see if any entities has registered yet
 ```
 sensuctl entity list
 ```
-No entities yet.
+No entities in the list yet.
 
 **2. Get list of events:**
+Let's check to see if any events have been registered yet.
 ```
 sensuctl event list
 ```
-No events yet.
+No events recorded yet either.
 
+**3. Start the Sensu Agent**
+
+Let's go ahead and start the Sensu agent:
+
+```
+sudo systemctl start sensu-agent
+```
+
+We can see the sandbox agent using sensuctl
+```
+sensuctl entity list
+```
+
+The Sensu agent also sends a keepalive event
+```
+sensuctl event list
+```
+The sensu-go-sandbox keepalive event has status 0, meaning the agent is successfully able to communicate with the server on a periodic basic.  
+If we wait a minute and check the event list again you will set the `Last Seen` timestamp for the keepalive check has updated.  
+
+We can also see the event and the client in the [dashboard event view](http://localhost:3002/#/events) and [client view](http://localhost:3002/#/clients).
+
+## Lesson \#2: Pipe keepalive events into Slack
+
+Now that we know the sandbox is working properly, let's get to the fun stuff: creating a pipeline.
+In this lesson, we'll create a pipeline to send keepalive alerts to Slack.  At the end of this lesson we'll be able to get an Slack message when any keepalive status goes non-zero.
+
+(If you'd rather not create a Slack account, you can skip ahead to [lesson 3](#lesson-3-automate-event-production-with-the-sensu-agent).)
+
+
+In this lesson, we'll use the [Sensu Slack Handler](https://github.com/sensu/sensu-slack-handler) to create our pipeline. For convenience, this command was installed as part of sandbox provisioning. 
+
+**1. Create the handler definintion using sensuctl**
+```
+sensuctl handler create --interactive
+```
+
+
+## Lesson \#2: Create an agent check
+
+
+```
+curl -s http://localhost:4567/clients | jq .
+```
+
+```json
+$ curl -s http://localhost:4567/clients | jq .
+[
+  {
+    "name": "sensu-core-sandbox",
+    "address": "10.0.2.15",
+    "subscriptions": [
+      "client:sensu-core-sandbox"
+    ],
+    "version": "1.4.3",
+    "timestamp": 1534284788
+  },
+  {"...": "..."}
+]
+
+
+
+
+<!---
 **3. Retrieve the admin user API access token:**
 ```
 SENSU_ACCESS_TOKEN=`cat ~/.config/sensu/sensuctl/cluster|jq ".access_token" | sed -e 's/^"//' -e 's/"$//'`
 ```
-This is the access token sensuctl caches after authenticating with the Sensu API. We'll just use that for now.
+This is the access token sensuctl caches after authenticating with the Sensu API. We'll just use that for now to access the API. 
 
 
 **4. Create first event via API Post using access token:**
@@ -95,7 +161,7 @@ curl -v -XPOST \
 -d "$(jq '.' -cM event.json )" \
 http://127.0.0.1:8080/events 
 ```
-Here we using an example json event in the file `event.json` in the vagrant home directory.
+Here we using an example json event in the provided file `event.json` in the vagrant home directory.
 
  
 ### N.B. The access token expires every 15 minutes. You could manually renew it but sensuctl can do it more easily, so just run any command that queries the API and re-do steps 1 & 2 
@@ -104,12 +170,17 @@ Here we using an example json event in the file `event.json` in the vagrant home
 We can use the events API to see the resulting event:
 
 ```
-curl -s http://localhost:4567/events | jq .
+curl -s -H "Authorization: Bearer ${SENSU_ACCESS_TOKEN}" http://localhost:8080/events | jq .
+```
+-->
+
+**3 
+We can also use the sensuctl command to interact with the API.
+```
+sensuctl event list --format json | jq .
 ```
 
-_NOTE: The events API returns only warning (`"status": 1`) and critical (`"status": 2`) events._
-
-Event data contains information about the part of your system the event came from (the `client` or `source`), the result of the check (including a `history` of recent `status` results), and the event itself (including the number of `occurrences`).
+Event data contains information about the part of your ecosystem the event came from (the `entity` or `proxy_entity`), the result of the check (including a `history` of recent `status` results), and the event itself (including the number of `occurrences`).
 
 In this example, the event data tells us that this is a warning-level alert (`"status": 1`). We can also see the alert and the client in the [dashboard event view](http://localhost:3002/#/events) and [client view](http://localhost:3002/#/clients).
 
@@ -554,34 +625,6 @@ $ curl -s http://localhost:4567/settings | jq .
 }
 ```
 
-**3. Start the Sensu client**
-
-Now that we have our InfluxDB pipeline set up, let's start the Sensu client:
-
-```
-sudo systemctl start sensu-client
-```
-
-We can see the sandbox client start up using the clients API:
-
-```
-curl -s http://localhost:4567/clients | jq .
-```
-
-```json
-$ curl -s http://localhost:4567/clients | jq .
-[
-  {
-    "name": "sensu-core-sandbox",
-    "address": "10.0.2.15",
-    "subscriptions": [
-      "client:sensu-core-sandbox"
-    ],
-    "version": "1.4.3",
-    "timestamp": 1534284788
-  },
-  {"...": "..."}
-]
 ```
 
 In the [dashboard client view](http://localhost:3000/#/clients), we can see that the client running in the sandbox is executing keepalive checks.

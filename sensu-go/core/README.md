@@ -114,13 +114,87 @@ In this lesson, we'll create a pipeline to send keepalive alerts to Slack.  At t
 
 In this lesson, we'll use the [Sensu Slack Handler](https://github.com/sensu/sensu-slack-handler) to create our pipeline. For convenience, this command was installed as part of sandbox provisioning. 
 
-**1. Create the handler definintion using sensuctl**
-```
-sensuctl handler create --interactive
-```
+
+**1. Get your Slack webhook URL**
+
+If you're already an admin of a Slack, visit `https://YOUR WORKSPACE NAME HERE.slack.com/services/new/incoming-webhook` and follow the steps to add the Incoming WebHooks integration, choose a channel, and save the settings.
+(If you're not yet a Slack admin, start [here](https://slack.com/get-started#create) to create a new workspace.)
+After saving, you'll see your webhook URL under Integration Settings.
 
 
-## Lesson \#2: Create an agent check
+**2. Test the Slack handler manually**
+We can manually test the operation of the handler on the sandbox commandline. Let's encode the Slack webhook details into environment variables.  
+```
+KEEPALIVE_SLACK_CHANNEL="#sensu-sandbox"
+KEEPALIVE_SLACK_WEBHOOK="https://hooks.slack.com/services/AAA/BBB/CCC"
+```
+You will need to change the channel string and webhook url string to match your particular Slack account configuration.
+
+
+```
+sensuctl event info sensu-go-sandbox keepalive --format json | /usr/local/bin/sensu-slack-handler -c "${KEEPALIVE_SLACK_CHANNEL}" -w "${KEEPALIVE_SLACK_WEBHOOK"
+```
+
+If you have the correct channel and webhook url configured, you should now see a new "green" message in slack indicating sensu-go-sandbox resolved status.  
+
+Now let's disable the agent service and wait a couple of minutes for the keepalive check to enter the warning state, status = 1.  
+```
+sudo systemctl stop sensu-agent
+``` 
+
+Now is a good time to grab a cup of coffee, or browse the Sensu documentation for a couple of minutes. 
+Let's check to make sure the sandbox keepalive is now in a failed state. 
+```  
+sensuctl event list
+```  
+The keepalive event should report Status = 1 after the agent has been stopped for a couple of minutes.  Once in the failed state, we can manually run the Slack handler again.
+
+```
+sensuctl event info sensu-go-sandbox keepalive --format json | /usr/local/bin/sensu-slack-handler -c "${KEEPALIVE_SLACK_CHANNEL}" -w "${KEEPALIVE_SLACK_WEBHOOK"
+
+```
+The resulting slack message is now "orange" indicating a warning, status = 1.  Okay the slack handler works, let's build a Sensu keepalive pipeline
+  
+
+**2. Edit sensu-slack-handler.json**
+We've included a json handler resource definition in the sandbox for you to edit.  
+```
+nano sensu-slack-handler.json
+```
+Make sure you update the Slack channel and webhook url to match the manual testing from the step above.  
+
+
+**3. Create the handler definition using sensuctl**
+```
+sensuctl create -f sensu-slack-handler.json
+
+```
+We can confirm its creation with sensuctl  
+```  
+sensuctl handler list
+```
+
+**4. Test Slack handler pipeline**
+Restart the sensu agent to start producing additional keepalive events.
+```
+sudo systemctl restart sensu-agent
+```
+Once the agent begins to send keepalive events, you should get message into your slack channel!  
+
+Now stop the sensu agent  
+```  
+sudo systemctl stop sensu-agent
+
+```
+You should get a warning message after a couple of minutes informing you the sandbox agent is no longer running.  
+
+
+## Lesson \#3: Filter keepalive events
+Typically we aren't interested in getting keepalive messages for entities until they enter a non-zero status state.  
+Let's add a filter to the keepalive handler pipeline so we only get messages when the sandbox agent is stopped.  
+
+
+## Lesson \#4: Create an agent check
 
 
 ```
@@ -294,11 +368,6 @@ First we'll need to install the plugins:
 sudo sensu-install -p sensu-plugins-slack
 ```
 
-**2. Get your Slack webhook URL**
-
-If you're already an admin of a Slack, visit `https://YOUR WORKSPACE NAME HERE.slack.com/services/new/incoming-webhook` and follow the steps to add the Incoming WebHooks integration, choose a channel, and save the settings.
-(If you're not yet a Slack admin, start [here](https://slack.com/get-started#create) to create a new workspace.)
-After saving, you'll see your webhook URL under Integration Settings.
 
 **3. Create a handler to send event data to Slack**
 

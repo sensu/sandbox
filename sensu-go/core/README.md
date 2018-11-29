@@ -181,20 +181,36 @@ sudo systemctl restart sensu-agent
 ```
 Once the agent begins to send keepalive events, you should get message into your slack channel!  
 
-Now stop the sensu agent  
+
+
+**5. Filter keepalive events **
+Typically we aren't interested in getting keepalive messages for entities until they enter a non-zero status state.  
+Let's interactively add the built-in `is_incident` filter to the keepalive handler pipeline so we only get messages when the sandbox agent fails to send a keepalive event.  
+```
+sensuctl handler update 
+```
+Hit enter until you reach the filters selection.  
+```
+? Filters: [? for help] is_incident
+```
+Hit enter through the rest of the interactive update fields to keep current selection.
+
+We can confirm the handler is updated with sensuctl
+```
+sensuctl handler info keepalive
+```
+
+Now with the filter in place we should no longer be receiving messages in the Slack channel every time the sandbox agent sends a keepalive event.
+
+Let's stop the agent and confirm we still get the warning message.
 ```  
 sudo systemctl stop sensu-agent
 
 ```
-You should get a warning message after a couple of minutes informing you the sandbox agent is no longer running.  
+We will get the warning message after a couple of minutes informing you the sandbox agent is no longer sending keepalive events.
 
 
-## Lesson \#3: Filter keepalive events
-Typically we aren't interested in getting keepalive messages for entities until they enter a non-zero status state.  
-Let's add a filter to the keepalive handler pipeline so we only get messages when the sandbox agent is stopped.  
-
-
-## Lesson \#4: Create an agent check
+## Lesson \#3: Create an agent check
 
 
 ```

@@ -118,6 +118,8 @@ chsh -s /bin/bash sensu
 # Install rvm and setup ruby 2.4.2 rvm provided binary
 yum install -q -y patch autoconf automake bison gcc-c++ libffi-devel libtool readline-devel sqlite-devel zlib-devel glibc-headers glibc-devel openssl-devel libyaml libyaml-devel
 
+wget --content-disposition https://packagecloud.io/sensu/community/packages/el/7/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm/download.rpm
+rpm -Uvh /tmp/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm
 
 curl -sSL https://get.rvm.io | bash
 curl -sSL https://get.rvm.io | bash -s stable --ruby

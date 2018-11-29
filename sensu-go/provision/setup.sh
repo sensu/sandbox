@@ -170,6 +170,12 @@ chown -R grafana:grafana /var/lib/grafana
 rm /etc/influxdb/influxdb.conf
 cp /vagrant_files/etc/influxdb/influxdb.conf /etc/influxdb/influxdb.conf
 
+
+## Install Sensu Go Slack Handler
+wget https://github.com/sensu/sensu-slack-handler/releases/download/0.1.2/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -q -nc -O /tmp/sensu-slack-handler_0.1.2_linux_amd64.tar.gz
+tar xvzf /tmp/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -C /tmp/
+cp /tmp/bin/sensu-slack-handler /usr/local/bin/
+
 # Going to do some general setup stuff
 
 if [ -z ${SE_USER+x} ]; then 

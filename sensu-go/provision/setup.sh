@@ -106,12 +106,15 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 # Install Needed Yum Packages
-yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load 
+yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
 
 yum -q -y groupinstall "Development Tools"
-wget --content-disposition https://packagecloud.io/sensu/community/packages/el/7/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm/download.rpm
+wget -q -nc -P /tmp/ --content-disposition https://packagecloud.io/sensu/community/packages/el/7/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm/download.rpm
 
 rpm -Uvh /tmp/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm
+
+gem install sensu-translator
+
 
 ## Setup sensu user to be able to make use for rvm installed ruby
 #mkdir -p /opt/sensu
@@ -172,9 +175,12 @@ cp /vagrant_files/etc/influxdb/influxdb.conf /etc/influxdb/influxdb.conf
 
 
 ## Install Sensu Go Slack Handler
-wget https://github.com/sensu/sensu-slack-handler/releases/download/0.1.2/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -q -nc -O /tmp/sensu-slack-handler_0.1.2_linux_amd64.tar.gz
+wget -q -nc https://github.com/sensu/sensu-slack-handler/releases/download/0.1.2/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -O /tmp/sensu-slack-handler_0.1.2_linux_amd64.tar.gz
 tar xvzf /tmp/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -C /tmp/
 cp /tmp/bin/sensu-slack-handler /usr/local/bin/
+
+## Install the metrics-curl.rb check
+wget -q -nc https://github.com/jspaleta/sensu-plugins-http/releases/download/3.0.1/metrics-curl_linux_amd64.tar.gz -P /tmp/
 
 # Going to do some general setup stuff
 
@@ -206,7 +212,7 @@ echo -e "Configure sensuctl"
 sudo -u vagrant sensuctl configure -n  --username "admin" --password 'P@ssw0rd!' --url "http://127.0.0.1:8080"  
 
 echo -e "================="
-echo "Sensu 2 $VERSION $REPO Sandbox is now up and running!"
+echo "Sensu Go $VERSION $REPO Sandbox is now up and running!"
 if [ -z ${ENABLE_SENSU_SANDBOX_PORT_FORWARDING+x} ]; then 
 echo "Port forwarding from the VM to this host is disabled:"
 echo "  Access the dashboard at http://${IPADDR}:3000"

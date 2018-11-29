@@ -106,7 +106,7 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 # Install Needed Yum Packages
-yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc vim ntp influxdb grafana nagios-plugins-load 
+yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load 
 
 yum -q -y groupinstall "Development Tools"
 

@@ -20,7 +20,10 @@ A CentOS 7 virtual machine with Sensu Core, Sensu Enterprise, Sensu Enterprise D
 - [Lesson \#3: Automate event production with the Sensu client](sensu/enterprise#lesson-3-automate-event-production-with-the-sensu-client)
 
 
-### Explore Sensu 2 Beta
-A CentOS 7 virtual machine with Sensu 2 Core Beta, InfluxDB, and Grafana
+### Explore Sensu Go
+A CentOS 7 virtual machine with Sensu Go, InfluxDB, and Grafana
 
-- [Set up the sandbox](sensu-2.x/core#set-up-the-sandbox)
+- [Set up the sandbox](sensu-go/core#set-up-the-sandbox)
+- [Lesson \#1: Create a monitoring event](sensu-go/core#lesson-1-create-a-sensu-monitoring-event)
+- [Lesson \#2: Create an event pipeline](sensu-go/core#lesson-2-pipe-keepalive-events-into-slack)
+- [Lesson \#3: Automate event production with the Sensu agent](sensu-go/core#lesson-3-automate-event-production-with-the-sensu-agent)

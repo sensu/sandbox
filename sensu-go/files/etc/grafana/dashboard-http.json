@@ -87,21 +87,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "sensu-go-sandbox.curl_timings.http_code",
+          "groupBy": [],
+          "measurement": "sensu-go-sandbox",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -110,14 +97,10 @@
             [
               {
                 "params": [
-                  "value"
+                  "curl_timings.http_code"
                 ],
                 "type": "field"
               },
-              {
-                "params": [],
-                "type": "mean"
-              }
             ]
           ],
           "tags": []

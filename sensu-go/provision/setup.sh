@@ -213,8 +213,8 @@ influx -execute "CREATE USER sensu WITH PASSWORD 'sandbox'"
 influx -execute "GRANT ALL ON sensu TO sensu"
 
 # Create two Grafana dashboards
-curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
-curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
 
 # setup sensuctl
 echo -e "Configure sensuctl"

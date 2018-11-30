@@ -378,7 +378,7 @@ We can use sensuctl to confirm that the handler has been created successfully:
 sensuctl handler list
 ```
 
-**5. See the HTTP response code events for Nginx in [Grafana](http://localhost:4002/d/core01/sensu-go-sandbox).**
+**5. See the HTTP response code events for Nginx in [Grafana](http://localhost:4002/d/go01/sensu-go-sandbox).**
 
 Log in to Grafana as username: `admin` password: `admin`.
 We should see a graph of real HTTP response codes for Nginx.

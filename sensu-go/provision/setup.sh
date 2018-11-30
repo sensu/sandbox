@@ -55,10 +55,11 @@ if [ -z ${ENABLE_SENSU_NIGHTLY+x} ]; then
   #REPO="beta"
   # FIXME: Update for GA
   REPO="pre-release"
-  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-0950/rpm/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
-  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-0950/rpm/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
-  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-0950/rpm/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
+  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-1658/rpm/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
+  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-1658/rpm/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
+  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-1658/rpm/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
   
+
 else
   curl -s https://packagecloud.io/install/repositories/sensu/nightly/script.rpm.sh | bash
   REPO="nightly"
@@ -98,7 +99,7 @@ cp /vagrant_files/etc/yum.repos.d/influxdb.repo /etc/yum.repos.d/influxdb.repo
 cp /vagrant_files/etc/yum.repos.d/grafana.repo /etc/yum.repos.d/grafana.repo
 
 # Add the EPEL repositories
-[[ "$(rpm -qa | grep epel-release)" ]] || rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+[[ "$(rpm -qa | grep epel-release)" ]] || rpm -U --quiet https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
 
 # Import GPG keys
 cd /tmp
@@ -111,19 +112,20 @@ cp influxdb.key gpg.key RPM-GPG-KEY-grafana /etc/pki/rpm-gpg/
 systemctl stop firewalld
 systemctl disable firewalld
 
+#yum -q -y groupinstall "Development Tools"
+
 # Install Needed Yum Packages
 # FIXME: Update for GA
 #yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
 yum install -q -y ca-certificates curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
 # Install local pre-release rpm packages
-rpm -Uvh /tmp/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
-rpm -Uvh /tmp/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
-rpm -Uvh /tmp/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
+rpm -U --quiet /tmp/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
+rpm -U --quiet /tmp/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
+rpm -U --quiet /tmp/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
 
-yum -q -y groupinstall "Development Tools"
 wget -q -nc -P /tmp/ --content-disposition https://packagecloud.io/sensu/community/packages/el/7/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm/download.rpm
 
-rpm -Uvh /tmp/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm
+rpm -U --quiet /tmp/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm
 
 gem install sensu-translator
 
@@ -151,7 +153,7 @@ cp /vagrant_files/*.json /home/vagrant/
 
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
-  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_go__sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
+  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_go_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
 
 #else
 #  # If Enterprise
@@ -197,8 +199,8 @@ tar xvzf /tmp/sensu-influxdb-handler_2.0_linux_amd64.tar.gz -C /tmp/
 cp /tmp/sensu-influxdb-handler /usr/local/bin/
 
 
-## Install the metrics-curl.rb check
-wget -q -nc https://github.com/jspaleta/sensu-plugins-http/releases/download/3.0.1/metrics-curl_linux_amd64.tar.gz -P /tmp/
+### Install the metrics-curl.rb check
+#wget -q -nc https://github.com/jspaleta/sensu-plugins-http/releases/download/3.0.1/metrics-curl_linux_amd64.tar.gz -P /tmp/
 
 # Going to do some general setup stuff
 

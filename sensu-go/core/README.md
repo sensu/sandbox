@@ -58,7 +58,7 @@ You should now have shell access to the sandbox and should be greeted with this 
 
 _NOTE: To exit out of the sandbox, use `CTRL`+`D`. Use `vagrant destroy` then `vagrant up` to erase and restart the sandbox. Use `vagrant provision` to reset sandbox's sensu configuration to the beginning of this lesson_
 
-_NOTE: To save you a little time we've pre-configured sensuctl in the sandbox to use the Sensu Go admin user with default password as part of sandbox provisioning, so you won't have to configure sensuctl each time you spin up the sandbox to try out a new feature. Before installing sensuctl outside of the sandbox please, please read the [first time setup reference](https://docs.sensu.io/sensu-go/5.0/sensuctl/reference/#first-time-setup) to learn how to configure sensuctl.  
+_NOTE: To save you a little time we've pre-configured sensuctl in the sandbox to use the Sensu Go admin user with default password as part of sandbox provisioning, so you won't have to configure sensuctl each time you spin up the sandbox to try out a new feature. Before installing sensuctl outside of the sandbox please, please read the [first time setup reference](https://docs.sensu.io/sensu-go/5.0/sensuctl/reference/#first-time-setup) to learn how to configure sensuctl._  
 
 ---
 

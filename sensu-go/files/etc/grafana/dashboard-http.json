@@ -100,7 +100,7 @@
                   "curl_timings.http_code"
                 ],
                 "type": "field"
-              },
+              }
             ]
           ],
           "tags": []

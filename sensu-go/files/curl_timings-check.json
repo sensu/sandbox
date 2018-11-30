@@ -1,0 +1,32 @@
+{
+  "type": "CheckConfig",
+  "api_version": "core/v2",
+  "metadata": {
+    "name": "curl_timings",
+    "namespace": "default"
+  },
+  "spec": {
+    "check_hooks": null,
+    "command": "/opt/sensu-plugins-ruby/embedded/bin/metrics-curl.rb -u \"http://localhost\"",
+    "env_vars": null,
+    "handlers": [],
+    "high_flap_threshold": 0,
+    "interval": 10,
+    "low_flap_threshold": 0,
+    "output_metric_format": "graphite_plaintext",
+    "output_metric_handlers": [
+      "influx-db"
+    ],
+    "proxy_entity_name": "",
+    "publish": true,
+    "round_robin": false,
+    "runtime_assets": [],
+    "stdin": false,
+    "subdue": null,
+    "subscriptions": [
+      "entity:sensu-go-sandbox"
+    ],
+    "timeout": 0,
+    "ttl": 0
+  }
+}

@@ -140,7 +140,7 @@ KEEPALIVE_SLACK_WEBHOOK="https://hooks.slack.com/services/AAA/BBB/CCC"
 Now let's manually generate a Slack alert using the sandbox keepalive events:
 
 ```
-sensuctl event info sensu-go-sandbox keepalive --format json | /usr/local/bin/sensu-slack-handler -c "${KEEPALIVE_SLACK_CHANNEL}" -w "${KEEPALIVE_SLACK_WEBHOOK"
+sensuctl event info sensu-go-sandbox keepalive --format json | /usr/local/bin/sensu-slack-handler -c "${KEEPALIVE_SLACK_CHANNEL}" -w "${KEEPALIVE_SLACK_WEBHOOK}"
 ```
 
 If you have the correct channel and webhook url configured, you should now see a new message in Slack indicating that the sensu-go-sandbox is in a ok state.  
@@ -161,7 +161,7 @@ sensuctl event list
 The keepalive event should report status = 1 after the agent has been stopped for a couple of minutes.  Once the sandbox entity is in a failed state, we can manually run the Slack handler again.
 
 ```
-sensuctl event info sensu-go-sandbox keepalive --format json | /usr/local/bin/sensu-slack-handler -c "${KEEPALIVE_SLACK_CHANNEL}" -w "${KEEPALIVE_SLACK_WEBHOOK"
+sensuctl event info sensu-go-sandbox keepalive --format json | /usr/local/bin/sensu-slack-handler -c "${KEEPALIVE_SLACK_CHANNEL}" -w "${KEEPALIVE_SLACK_WEBHOOK}"
 
 ```
 The resulting Slack message now indicates a warning (status = 1).
@@ -204,7 +204,7 @@ Now that we're generating Slack alert automatically, let's reduce the potential 
 To accomplish this, we'll interactively add the built-in `is_incident` filter to the keepalive handler pipeline so we'll only receive alerts when the sandbox entity fails to send a keepalive event.
 
 ```
-sensuctl handler update 
+sensuctl handler update keepalive
 ```
 
 When prompted for the filters selection, enter `is_incident` to apply the built-in incidents filter.
@@ -233,7 +233,14 @@ We should see the warning message after a couple of minutes, informing you that 
 So far we've used only the Sensu agent's built-in keepalive feature, but in this lesson, we'll create a check that automatically produces workload-related events.
 Instead of sending alerts to Slack, we'll store event data with [InfluxDB](https://www.influxdata.com/) and visualize it with [Grafana](https://grafana.com/).
 
-**1. Install Nginx and the Sensu HTTP Plugin**
+
+**1. Make sure Sensu agent is running**
+
+```
+sudo systemctl restart sensu-agent
+```
+
+**2. Install Nginx and the Sensu HTTP Plugin**
 
 We'll use the [Sensu HTTP Plugin](https://github.com/sensu-plugins/sensu-plugins-http) to monitor an Nginx server running on the sandbox.
 
@@ -268,12 +275,12 @@ $ /opt/sensu-plugins-ruby/embedded/bin/metrics-curl.rb -u "http://localhost"
 sensu-go-sandbox.curl_timings.http_code 200 1535670975
 ```
 
-**2. Create a check to monitor Nginx**
+**3. Create a check to monitor Nginx**
 
 Use a configuration file to create a service check that runs `metrics-curl.rb` every 10 seconds on all entities with the `entity:sensu-go-sandbox` subscription and send it to the InfluxDB metrics handler pipeline:
 
 ```
-sudo nano check_curl_timings.json
+nano curl_timings-check.json
 ```
 
 Notice how we are defining a metrics handler and metric format. In Sensu Go metrics are a core element of the data model, and we can build pipelines to handle metrics separately from the alerts!
@@ -349,7 +356,7 @@ sensuctl event info sensu-go-sandbox curl_timings --format json |jq .
 
 Because we configured a metric-format, the Sensu agent was able to convert the Graphite-formatted metrics provided by the check command into a set of Sensu-formatted metrics. Metric support isn't limited to just Graphite, the Sensu agent can extract metrics in multiple line protocol formats, including Nagios performance data.  Now let's create the InfluxDB handler to store these metrics and visualize them with Grafana.
 
-**3. Create an InfluxDB pipeline**
+**4. Create an InfluxDB pipeline**
 
 Since we've already installed InfluxDB as part of the sandbox, all we need to do to create an InfluxDB pipeline is create a Sensu handler. As part of sandbox provisioning, a version of the sensu-influxdb-handler has been installed for convenience. 
 
@@ -371,7 +378,7 @@ We can use sensuctl to confirm that the handler has been created successfully:
 sensuctl handler list
 ```
 
-**4. See the HTTP response code events for Nginx in [Grafana](http://localhost:4002/d/core01/sensu-go-sandbox).**
+**5. See the HTTP response code events for Nginx in [Grafana](http://localhost:4002/d/core01/sensu-go-sandbox).**
 
 Log in to Grafana as username: `admin` password: `admin`.
 We should see a graph of real HTTP response codes for Nginx.

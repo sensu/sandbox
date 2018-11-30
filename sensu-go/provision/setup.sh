@@ -112,7 +112,10 @@ cp influxdb.key gpg.key RPM-GPG-KEY-grafana /etc/pki/rpm-gpg/
 systemctl stop firewalld
 systemctl disable firewalld
 
-#yum -q -y groupinstall "Development Tools"
+
+echo -e "Installing Development Tools..."
+yum -q -y groupinstall "Development Tools"
+echo -e "Done installing Development Tools"
 
 # Install Needed Yum Packages
 # FIXME: Update for GA
@@ -149,7 +152,9 @@ gem install sensu-translator
 
 cd $HOME
 cp /vagrant_files/.bash_profile /home/vagrant/
+chown vagrant:vagrant /home/vagrant/.bash_profile
 cp /vagrant_files/*.json /home/vagrant/
+chown vagrant:vagrant /home/vagrant/*.json
 
 if [ -z ${SE_USER+x} ]; then 
   # If Core:

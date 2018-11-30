@@ -65,51 +65,66 @@ First off, we'll make sure everything is working correctly by creating a few eve
 
 From inside the sandbox run:
 ```
-curl -s http://localhost:4567/settings | jq .
+curl -s http://localhost:4567/info | jq .
 ```
 
-With the Sensu server, we can see that we have no active clients, and that Sensu is using Redis as the transport and datastore.
-We can see a lot of this same information in the [dashboard datacenter view](http://localhost:3000/#/datacenters).
+Example output, your's should look pretty similar:
 
 ```json
-$ curl -s http://localhost:4567/settings | jq .
+$ curl -s http://localhost:4567/info | jq .
 {
-  "client": {},
   "sensu": {
-    "spawn": {
-      "limit": 12
-    },
-    "keepalives": {
-      "thresholds": {
-        "warning": 120,
-        "critical": 180
-      }
+    "version": "1.6.1",
+    "settings": {
+      "hexdigest": "76361056939231ec98492b815fc0cbf7ea548289e98652b12a6f980228583481"
     }
   },
   "transport": {
     "name": "rabbitmq",
-    "reconnect_on_error": true
-  },
-  "checks": {},
-  "filters": {},
-  "mutators": {},
-  "handlers": {},
-  "extensions": {},
-  "rabbitmq": {
-    "host": "127.0.0.1",
-    "port": 5672,
-    "vhost": "/sensu",
-    "user": "sensu",
-    "password": "REDACTED",
-    "heartbeat": 30,
-    "prefetch": 50
+    "keepalives": {
+      "messages": 0,
+      "consumers": 1
+    },
+    "results": {
+      "messages": 0,
+      "consumers": 1
+    },
+    "connected": true
   },
   "redis": {
-    "host": "127.0.0.1",
-    "port": 6379
-  }
+    "connected": true
+  },
+  "servers": [
+    {
+      "id": "e25fc077-3bcd-4c85-9c2f-93f0a504e717",
+      "hostname": "sensu-sandbox",
+      "address": "10.0.2.15",
+      "tasks": [
+        "check_request_publisher",
+        "client_monitor",
+        "check_result_monitor"
+      ],
+      "metrics": {
+        "cpu": {
+          "user": 0.34,
+          "system": 0.16
+        }
+      },
+      "sensu": {
+        "version": "1.6.1",
+        "settings": {
+          "hexdigest": "217270b0e7f4e501bc6fadbcf0d286707b8cacaaad0599178c116440c714dfb6"
+        }
+      },
+      "tessen": {
+        "enabled": true
+      },
+      "timestamp": 1543555608
+    }
+  ]
 }
 ```
+We can see a lot of this same information in the [dashboard datacenter view](http://localhost:3000/#/datacenters).
 
 _NOTE: The dashboard links here work on your workstation where you are running the sandbox if VM port forwarding was enabled as instructed in the set up step above._ 
 

@@ -50,9 +50,15 @@ else
 fi
 
 if [ -z ${ENABLE_SENSU_NIGHTLY+x} ]; then
-  # Using beta for now... after GA this will move to using releases
-  curl -s https://packagecloud.io/install/repositories/sensu/beta/script.rpm.sh | bash
-  REPO="beta"
+  ## Using beta for now... after GA this will move to using releases
+  #curl -s https://packagecloud.io/install/repositories/sensu/beta/script.rpm.sh | bash
+  #REPO="beta"
+  # FIXME: Update for GA
+  REPO="pre-release"
+  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-0950/rpm/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
+  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-0950/rpm/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
+  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-0950/rpm/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
+  
 else
   curl -s https://packagecloud.io/install/repositories/sensu/nightly/script.rpm.sh | bash
   REPO="nightly"
@@ -106,7 +112,13 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 # Install Needed Yum Packages
-yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
+# FIXME: Update for GA
+#yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
+yum install -q -y ca-certificates curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
+# Install local pre-release rpm packages
+rpm -Uvh /tmp/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
+rpm -Uvh /tmp/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
+rpm -Uvh /tmp/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
 
 yum -q -y groupinstall "Development Tools"
 wget -q -nc -P /tmp/ --content-disposition https://packagecloud.io/sensu/community/packages/el/7/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm/download.rpm
@@ -139,11 +151,11 @@ cp /vagrant_files/*.json /home/vagrant/
 
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
-  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_2_core_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
+  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_go__sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
 
 #else
 #  # If Enterprise
-#  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_2_enterprise_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
+#  echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_go_enterprise_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
 fi
 
 # Set grafana to port 4000 to not conflict with uchiwa dashboard

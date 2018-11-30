@@ -175,9 +175,15 @@ cp /vagrant_files/etc/influxdb/influxdb.conf /etc/influxdb/influxdb.conf
 
 
 ## Install Sensu Go Slack Handler
-wget -q -nc https://github.com/sensu/sensu-slack-handler/releases/download/0.1.2/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -O /tmp/sensu-slack-handler_0.1.2_linux_amd64.tar.gz
+wget -q -nc https://github.com/sensu/sensu-slack-handler/releases/download/0.1.2/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -P /tmp/
 tar xvzf /tmp/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -C /tmp/
 cp /tmp/bin/sensu-slack-handler /usr/local/bin/
+
+## Install Sensu Go InfluxDB Handler
+wget -q -nc https://github.com/sensu/sensu-influxdb-handler/releases/download/v2.0/sensu-influxdb-handler_2.0_linux_amd64.tar.gz -P /tmp/
+tar xvzf /tmp/sensu-influxdb-handler_2.0_linux_amd64.tar.gz -C /tmp/
+cp /tmp/sensu-influxdb-handler /usr/local/bin/
+
 
 ## Install the metrics-curl.rb check
 wget -q -nc https://github.com/jspaleta/sensu-plugins-http/releases/download/3.0.1/metrics-curl_linux_amd64.tar.gz -P /tmp/
@@ -202,6 +208,9 @@ systemctl enable grafana-server
 # Create the InfluxDB database
 influx -execute "DROP DATABASE sensu;"
 influx -execute "CREATE DATABASE sensu;"
+
+influx -execute "CREATE USER sensu WITH PASSWORD 'sandbox'"
+influx -execute "GRANT ALL ON sensu TO sensu"
 
 # Create two Grafana dashboards
 curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db

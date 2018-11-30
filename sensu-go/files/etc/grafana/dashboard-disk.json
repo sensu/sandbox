@@ -101,7 +101,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "sensu-core-sandbox.curl_timings.http_code",
+          "measurement": "sensu-go-sandbox.curl_timings.http_code",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -213,7 +213,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "sensu-core-sandbox.disk_usage.root.boot.used_percentage",
+          "measurement": "sensu-go-sandbox.disk_usage.root.boot.used_percentage",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -312,8 +312,8 @@
     ]
   },
   "timezone": "",
-  "title": "Sensu Core Sandbox Combined",
-  "uid": "core02",
+  "title": "Sensu Go Sandbox Combined",
+  "uid": "go02",
   "version": 5
 }
 }

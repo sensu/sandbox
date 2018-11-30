@@ -101,7 +101,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "sensu-core-sandbox.curl_timings.http_code",
+          "measurement": "sensu-go-sandbox.curl_timings.http_code",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -200,8 +200,8 @@
     ]
   },
   "timezone": "",
-  "title": "Sensu Core Sandbox",
-  "uid": "core01",
+  "title": "Sensu Go Sandbox",
+  "uid": "go01",
   "version": 5
 }
 }

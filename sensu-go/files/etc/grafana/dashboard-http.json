@@ -87,21 +87,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "sensu-core-sandbox.curl_timings.http_code",
+          "groupBy": [],
+          "measurement": "sensu-go-sandbox",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -110,13 +97,9 @@
             [
               {
                 "params": [
-                  "value"
+                  "curl_timings.http_code"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -200,8 +183,8 @@
     ]
   },
   "timezone": "",
-  "title": "Sensu Core Sandbox",
-  "uid": "core01",
+  "title": "Sensu Go Sandbox",
+  "uid": "go01",
   "version": 5
 }
 }

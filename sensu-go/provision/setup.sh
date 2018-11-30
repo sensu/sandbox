@@ -106,33 +106,37 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 # Install Needed Yum Packages
-yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc vim ntp influxdb grafana nagios-plugins-load 
+yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
 
 yum -q -y groupinstall "Development Tools"
+wget -q -nc -P /tmp/ --content-disposition https://packagecloud.io/sensu/community/packages/el/7/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm/download.rpm
 
-# Setup sensu user to be able to make use for rvm installed ruby
-mkdir -p /opt/sensu
-chown -R sensu:sensu /opt/sensu
-chsh -s /bin/bash sensu
+rpm -Uvh /tmp/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm
 
-# Install rvm and setup ruby 2.4.2 rvm provided binary
-yum install -q -y patch autoconf automake bison gcc-c++ libffi-devel libtool readline-devel sqlite-devel zlib-devel glibc-headers glibc-devel openssl-devel libyaml libyaml-devel
+gem install sensu-translator
 
 
-curl -sSL https://get.rvm.io | bash
-curl -sSL https://get.rvm.io | bash -s stable --ruby
-/usr/local/rvm/bin/rvm rvmrc warning ignore allGemfiles
-/usr/local/rvm/bin/rvm install ruby 2.4.2
+## Setup sensu user to be able to make use for rvm installed ruby
+#mkdir -p /opt/sensu
+#chown -R sensu:sensu /opt/sensu
+#chsh -s /bin/bash sensu
+## Install rvm and setup ruby 2.4.2 rvm provided binary
+#yum install -q -y patch autoconf automake bison gcc-c++ libffi-devel libtool readline-devel sqlite-devel zlib-devel glibc-headers glibc-devel openssl-devel libyaml libyaml-devel
+#curl -sSL https://get.rvm.io | bash
+#curl -sSL https://get.rvm.io | bash -s stable --ruby
+#/usr/local/rvm/bin/rvm rvmrc warning ignore allGemfiles
+#/usr/local/rvm/bin/rvm install ruby 2.4.2
+#usermod -a -G rvm sensu
+#usermod -a -G rvm vagrant 
 
-usermod -a -G rvm sensu
-usermod -a -G rvm vagrant 
-
-sudo -i -u sensu rvm --default use ruby 2.4.2
-sudo -i -u vagrant rvm --default use ruby 2.4.2
+#sudo -i -u sensu rvm --default use ruby 2.4.2
+#sudo -i -u vagrant rvm --default use ruby 2.4.2
 
 
 cd $HOME
 cp /vagrant_files/.bash_profile /home/vagrant/
+cp /vagrant_files/*.json /home/vagrant/
+
 if [ -z ${SE_USER+x} ]; then 
   # If Core:
   echo 'export PS1="\[\e[33m\][\[\e[m\]\[\e[31m\]sensu_2_core_sandbox\[\e[m\]\[\e[33m\]]\[\e[m\]\\$ "' >> /home/vagrant/.bash_profile
@@ -169,6 +173,21 @@ chown -R grafana:grafana /var/lib/grafana
 rm /etc/influxdb/influxdb.conf
 cp /vagrant_files/etc/influxdb/influxdb.conf /etc/influxdb/influxdb.conf
 
+
+## Install Sensu Go Slack Handler
+wget -q -nc https://github.com/sensu/sensu-slack-handler/releases/download/0.1.2/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -P /tmp/
+tar xvzf /tmp/sensu-slack-handler_0.1.2_linux_amd64.tar.gz -C /tmp/
+cp /tmp/bin/sensu-slack-handler /usr/local/bin/
+
+## Install Sensu Go InfluxDB Handler
+wget -q -nc https://github.com/sensu/sensu-influxdb-handler/releases/download/v2.0/sensu-influxdb-handler_2.0_linux_amd64.tar.gz -P /tmp/
+tar xvzf /tmp/sensu-influxdb-handler_2.0_linux_amd64.tar.gz -C /tmp/
+cp /tmp/sensu-influxdb-handler /usr/local/bin/
+
+
+## Install the metrics-curl.rb check
+wget -q -nc https://github.com/jspaleta/sensu-plugins-http/releases/download/3.0.1/metrics-curl_linux_amd64.tar.gz -P /tmp/
+
 # Going to do some general setup stuff
 
 if [ -z ${SE_USER+x} ]; then 
@@ -190,16 +209,19 @@ systemctl enable grafana-server
 influx -execute "DROP DATABASE sensu;"
 influx -execute "CREATE DATABASE sensu;"
 
+influx -execute "CREATE USER sensu WITH PASSWORD 'sandbox'"
+influx -execute "GRANT ALL ON sensu TO sensu"
+
 # Create two Grafana dashboards
-curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
-curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/cc-dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
+curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
 
 # setup sensuctl
 echo -e "Configure sensuctl"
 sudo -u vagrant sensuctl configure -n  --username "admin" --password 'P@ssw0rd!' --url "http://127.0.0.1:8080"  
 
 echo -e "================="
-echo "Sensu 2 $VERSION $REPO Sandbox is now up and running!"
+echo "Sensu Go $VERSION $REPO Sandbox is now up and running!"
 if [ -z ${ENABLE_SENSU_SANDBOX_PORT_FORWARDING+x} ]; then 
 echo "Port forwarding from the VM to this host is disabled:"
 echo "  Access the dashboard at http://${IPADDR}:3000"

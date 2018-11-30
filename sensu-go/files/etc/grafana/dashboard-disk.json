@@ -87,21 +87,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "sensu-core-sandbox.curl_timings.http_code",
+          "groupBy": [],
+          "measurement": "sensu-go-sandbox",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -110,13 +97,9 @@
             [
               {
                 "params": [
-                  "value"
+                  "curl_timings.http_code"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -199,21 +182,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "sensu-core-sandbox.disk_usage.root.boot.used_percentage",
+          "groupBy": [],
+          "measurement": "sensu-go-sandbox",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -222,13 +192,9 @@
             [
               {
                 "params": [
-                  "value"
+                  "disk_usage.root.boot.used_percentage"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ]
           ],
@@ -312,8 +278,8 @@
     ]
   },
   "timezone": "",
-  "title": "Sensu Core Sandbox Combined",
-  "uid": "core02",
+  "title": "Sensu Go Sandbox Combined",
+  "uid": "go02",
   "version": 5
 }
 }

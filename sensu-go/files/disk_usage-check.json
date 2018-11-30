@@ -1,0 +1,34 @@
+{
+  "type": "CheckConfig",
+  "spec": {
+    "command": "/opt/sensu-plugins-ruby/embedded/bin/metrics-disk-usage.rb",
+    "handlers": [
+    ],
+    "high_flap_threshold": 0,
+    "interval": 10,
+    "low_flap_threshold": 0,
+    "publish": true,
+    "runtime_assets": [],
+    "subscriptions": [
+      "entity:sensu-go-sandbox"
+    ],
+    "proxy_entity_name": "",
+    "check_hooks": null,
+    "stdin": false,
+    "subdue": null,
+    "ttl": 0,
+    "timeout": 0,
+    "round_robin": false,
+    "output_metric_format": "graphite_plaintext",
+    "output_metric_handlers": [
+      "influx-db"
+    ],
+    "env_vars": null,
+    "metadata": {
+      "name": "check_disk_usage",
+      "namespace": "default",
+      "labels": null,
+      "annotations": null
+    }
+  }
+}

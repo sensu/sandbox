@@ -3,9 +3,9 @@
 This tutorial will get you up and running with Sensu.
 
 - [Set up the sandbox](#set-up-the-sandbox)
-- [Lesson \#1: Create a monitoring event](#lesson-1-create-a-monitoring-event)
-- [Lesson \#2: Create an event pipeline](#lesson-2-pipe-events-into-slack)
-- [Lesson \#3: Automate event production with the Sensu client](#lesson-3-automate-event-production-with-the-sensu-client)
+- [Lesson \#1: Create a monitoring event](#lesson-1-create-a-sensu-monitoring-event)
+- [Lesson \#2: Create an event pipeline](#lesson-2-pipe-keepalive-events-into-slack)
+- [Lesson \#3: Automate event production with the Sensu agent](#lesson-3-automate-event-production-with-the-sensu-agent)
 
 Report issues or share feedback by [opening an issue in this repo](https://github.com/sensu/sandbox/issues/new).
 

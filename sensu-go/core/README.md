@@ -212,13 +212,13 @@ We will get the warning message after a couple of minutes informing you the sand
 
 
 
-## Lesson \#3: Automate event production with the Sensu client
-So far we've used only the Sensu server and API, but in this lesson, we'll add the Sensu client and create a check to produce events automatically.
+## Lesson \#3: Automate event production with the Sensu agent
+So far we've used only the Sensu agent's keepalive check, but in this lesson, we'll create a check that can be scheduled on the agent to produce workload relevant events.
 Instead of sending alerts to Slack, we'll store event data with [InfluxDB](https://www.influxdata.com/) and visualize it with [Grafana](https://grafana.com/).
 
 **1. Install Nginx and the Sensu HTTP Plugin**
 
-Up until now we've used placeholder event data, but in this lesson, we'll use the [Sensu HTTP Plugin](https://github.com/sensu-plugins/sensu-plugins-http) to monitor an Nginx server running on the sandbox.
+We'll use the [Sensu HTTP Plugin](https://github.com/sensu-plugins/sensu-plugins-http) to monitor an Nginx server running on the sandbox.
 
 First, install and start Nginx:
 
@@ -242,188 +242,114 @@ We'll be using the `metrics-curl.rb` plugin.
 We can test its output using:
 
 ```
-/opt/sensu/embedded/bin/metrics-curl.rb localhost
+/opt/sensu-plugins-ruby/embedded/bin/check-http.rb -u "http://localhost"
 ```
 
 ```
-$ /opt/sensu/embedded/bin/metrics-curl.rb localhost
+$ /opt/sensu-plugins-ruby/embedded/bin/metrics-curl.rb -u "http://localhost"
 ...
-sensu-core-sandbox.curl_timings.http_code 200 1535670975
+sensu-go-sandbox.curl_timings.http_code 200 1535670975
 ```
-
-**2. Create an InfluxDB pipeline**
-
-Since we've already installed InfluxDB as part of the sandbox, all we need to do to create an InfluxDB pipeline is create a configuration file:
-
-```
-sudo nano /etc/sensu/conf.d/handlers/influx.json
-```
-
-```
-{
-  "handlers": {
-    "influx": {
-      "type": "tcp",
-      "socket": {
-        "host": "127.0.0.1",
-        "port": 2003
-      },
-      "mutator": "only_check_output"
-    }
-  }
-}
-```
-
-This tells Sensu to reduce event data to only the `output` and forward it a TCP socket.
-
-Now restart the Sensu server and API:
-
-```
-sudo systemctl restart sensu-{server,api}
-```
-
-And confirm using the settings API:
-
-```
-curl -s http://localhost:4567/settings | jq .
-```
-
-```
-$ curl -s http://localhost:4567/settings | jq .
-{
-  "...": "...",
-  "handlers": {
-    "slack": {
-      "filters": [
-        "only_production"
-      ],
-      "type": "pipe",
-      "command": "handler-slack.rb"
-    },
-    "influx": {
-      "type": "tcp",
-      "socket": {
-        "host": "127.0.0.1",
-        "port": 2003
-      },
-      "mutator": "only_check_output"
-    }
-  },
-  "...": "..."
-}
-```
-
-```
-
-In the [dashboard client view](http://localhost:3000/#/clients), we can see that the client running in the sandbox is executing keepalive checks.
-
-**3. Add a client subscription**
-
-Clients run the set of checks defined by their `subscriptions`.
-Use a configuration file to assign our new client to run checks with the `sandbox-testing` subscription using `"subscriptions": ["sandbox-testing"]`:
-
-```
-sudo nano /etc/sensu/conf.d/client.json
-```
-
-```
-{
-  "client": {
-    "name": "sensu-core-sandbox",
-    "subscriptions": ["sandbox-testing"]
-  }
-}
-```
-
-Restart the Sensu client, server, and API:
-
-```
-sudo systemctl restart sensu-{client,server,api}
-```
-
-Then use the clients API to make sure the subscription is assigned to the client:
-
-```
-curl -s http://localhost:4567/clients | jq .
-```
-
-```
-$ curl -s http://localhost:4567/clients | jq .
-[
-  {
-    "name": "sensu-core-sandbox",
-    "address": "10.0.2.15",
-    "subscriptions": [
-      "client:sensu-core-sandbox",
-      "sandbox-testing"
-    ],
-    "version": "1.4.3",
-    "timestamp": 1534284788
-  },
-  {"...": "..."}
-]
-```
-
-If you don't see the new subscription, wait a few seconds and try the settings API again.
 
 **5. Create a check to monitor Nginx**
 
-Use a configuration file to create a service check that runs `metrics-curl.rb` every 10 seconds on all clients with the `sandbox-testing` subscription and send it to the InfluxDB pipeline:
+Use a configuration file to create a service check that runs `metrics-curl.rb` every 10 seconds on all clients with the `entity:sensu-go-sandbox` subscription and send it to the InfluxDB metrics handler pipeline:
 
 ```
-sudo nano /etc/sensu/conf.d/checks/check_curl_timings.json
+sudo nano check_curl_timings.json
 ```
+Notice how we are defining a metrics handler and metric format. In Sensu Go metrics are treated as first class citizens, and we can build pipelines to handle the metrics separate from the status!  
+
+If we wanted to be alerted that the check failed for some reason, we could configure a separate handler to alert us of that failure condition.  
 
 ```
-{
-  "checks": {
-    "check_curl_timings": {
-      "command": "/opt/sensu/embedded/bin/metrics-curl.rb localhost",
-      "interval": 10,
-      "subscribers": ["sandbox-testing"],
-      "type": "metric",
-      "handlers": ["influx"]
-    }
+sensuctl create -f curl_timings-check.json
+```
+The check should now exists.
+
+```
+sensuctl check list
+```  
+
+After about 10 seconds the check should have been run on the agent and we should have an event.  
+```
+sensuctl event info sensu-go-sandbox curl_timings --format json |jq .
+...
+  "metrics": {
+    "handlers": [
+      "influx-db"
+    ],
+    "points": [
+      {
+        "name": "sensu-go-sandbox.curl_timings.time_total",
+        "value": 0.005,
+        "timestamp": 1543532948,
+        "tags": []
+      },
+      {
+        "name": "sensu-go-sandbox.curl_timings.time_namelookup",
+        "value": 0.005,
+        "timestamp": 1543532948,
+        "tags": []
+      },
+      {
+        "name": "sensu-go-sandbox.curl_timings.time_connect",
+        "value": 0.005,
+        "timestamp": 1543532948,
+        "tags": []
+      },
+      {
+        "name": "sensu-go-sandbox.curl_timings.time_pretransfer",
+        "value": 0.005,
+        "timestamp": 1543532948,
+        "tags": []
+      },
+      {
+        "name": "sensu-go-sandbox.curl_timings.time_redirect",
+        "value": 0,
+        "timestamp": 1543532948,
+        "tags": []
+      },
+      {
+        "name": "sensu-go-sandbox.curl_timings.time_starttransfer",
+        "value": 0.005,
+        "timestamp": 1543532948,
+        "tags": []
+      },
+      {
+        "name": "sensu-go-sandbox.curl_timings.http_code",
+        "value": 200,
+        "timestamp": 1543532948,
+        "tags": []
+      }
+    ]
   }
-}
+```
+Because we configured a metric-format, the Sensu agent was able to convert the graphite metrics provided by the check command into a set of metrics points, Sensu's internal representation of metrics. Metric support isn't limited to just Graphite, Sensu agent can extract metrics in multiple line protocol formats.  Now let's create the referenced influxdb handler and do something with these metrics.
+
+
+
+**2. Create an InfluxDB pipeline**
+
+Since we've already installed InfluxDB as part of the sandbox, all we need to do to create an InfluxDB pipeline is create a handler following the [Storing Metrics with InfluxDB Guide](https://docs.sensu.io/sensu-go/5.0/guides/influx-db-metric-handler/.) As part of sandbox provisioning a version of the sensu-influxdb-handler is installed for convenience. 
+
+Take a look at the provided configuration file:
+```
+nano influx-handler.json
 ```
 
-Note that `"type": "metric"` ensures that Sensu will handle every event, not just warning and critical alerts.
-
-Restart the Sensu client, server, and API:
-
+To create the handler from the config, just use the sensuctl create command:
 ```
-sudo systemctl restart sensu-{client,server,api}
+sensuctl create -f influx-handler.json
 ```
 
-Use the settings API to make sure the check has been created:
-
+Confirm the handler is created with sensuctl  
 ```
-curl -s http://localhost:4567/settings | jq .
-```
-
-```
-$ curl -s http://localhost:4567/settings | jq .
-{
-  "...": "...",
-  "checks": {
-    "check_curl_timings": {
-      "command": "/opt/sensu/embedded/bin/metrics-curl.rb localhost",
-      "interval": 10,
-      "subscribers": [
-        "sandbox-testing"
-      ],
-      "type": "metric",
-      "handlers": [
-        "influx"
-      ]
-    }
-  },
-  "...": "..."
-}
+sensuctl handler list
 ```
 
-**6. See the HTTP response code events for Nginx in [Grafana](http://localhost:4000/d/core01/sensu-core-sandbox).**
+
+**3. See the HTTP response code events for Nginx in [Grafana](http://localhost:4002/d/core01/sensu-go-sandbox).**
 
 Log in to Grafana as username: `admin` password: `admin`.
 We should see a graph of real HTTP response codes for Nginx.
@@ -454,71 +380,36 @@ sudo sensu-install -p sensu-plugins-disk-checks
 And test it:
 
 ```
-/opt/sensu/embedded/bin/metrics-disk-usage.rb
+/opt/sensu-plugins-ruby/embedded/bin/metrics-disk-usage.rb
 ```
 
 ```
-$ /opt/sensu/embedded/bin/metrics-disk-usage.rb
+$ /opt/sensu-plugins-ruby/embedded/bin/metrics-disk-usage.rb
 sensu-core-sandbox.disk_usage.root.used 2235 1534191189
 sensu-core-sandbox.disk_usage.root.avail 39714 1534191189
 ...
 ```
 
-Then create the check using a configuration file, assigning it to the `sandbox-testing` subscription and the InfluxDB pipeline:
+Then create the check using a configuration file, assigning it to the `entity:sensu-go-sandbox` subscription and the InfluxDB pipeline:
 
 ```
-sudo nano /etc/sensu/conf.d/checks/check_disk_usage.json
+sudo nano disk_usage-check.json
+```
+```
+sensuctl create -f disk_usage-check.json
 ```
 
-```
-{
-  "checks": {
-    "check_disk_usage": {
-      "command": "/opt/sensu/embedded/bin/metrics-disk-usage.rb",
-      "interval": 10,
-      "subscribers": ["sandbox-testing"],
-      "type": "metric",
-      "handlers": ["influx"]
-    }
-  }
-}
-```
 
-Finally, restart all the things:
+And we should see it working in the dashboard client view and via sensuctl:
 
 ```
-sudo systemctl restart sensu-{client,server,api}
+sensuctl check list
+```
+```
+sensuctl event list
 ```
 
-And we should see it working in the dashboard client view and via the settings API:
-
-```
-curl -s http://localhost:4567/settings | jq .
-```
-
-```
-$ curl -s http://localhost:4567/settings | jq .
-{
-  "...": "...",
-  "checks":
-    {"...": "..."},
-    "check_disk_usage": {
-      "command": "/opt/sensu/embedded/bin/metrics-disk-usage.rb",
-      "interval": 10,
-      "subscribers": [
-        "sandbox-testing"
-      ],
-      "type": "metric",
-      "handlers": [
-        "influx"
-      ]
-    }
-  },
-  "...": "..."
-}
-```
-
-Now we should be able to see disk usage metrics for the sandbox in [Grafana](http://localhost:4000/d/core02/sensu-core-sandbox-combined).
+Now we should be able to see disk usage metrics for the sandbox in [Grafana](http://localhost:4002/d/go02/sensu-go-sandbox-combined).
 
 You made it! You're ready for the next level of Sensu-ing.
 Here are some resources to help continue your journey:

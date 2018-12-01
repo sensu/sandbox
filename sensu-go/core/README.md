@@ -113,6 +113,7 @@ The sensu-go-sandbox keepalive event has status 0, meaning the agent is successf
 If we wait a minute and check the event list again you will set the `Last Seen` timestamp for the keepalive check has updated.  
 
 We can also see the event and the client in the [dashboard event view](http://localhost:3002/#/events) and [entities view](http://localhost:3002/#/entities).
+When you login to the Sensu dashboard for the first time you will need login as user: `admin` with password: `P@ssw0rd!`.
 
 ## Lesson \#2: Pipe keepalive events into Slack
 

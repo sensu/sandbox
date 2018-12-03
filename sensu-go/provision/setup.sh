@@ -55,9 +55,9 @@ if [ -z ${ENABLE_SENSU_NIGHTLY+x} ]; then
   #REPO="beta"
   # FIXME: Update for GA
   REPO="pre-release"
-  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-1658/rpm/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
-  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-1658/rpm/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
-  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181130-1658/rpm/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
+  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181203-1314/rpm/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
+  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181203-1314/rpm/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
+  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181203-1314/rpm/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
   
 
 else

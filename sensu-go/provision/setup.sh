@@ -44,10 +44,14 @@ rm -rf /etc/sensu/*
 
 if [ -z ${SHARED_SENSU_DIR+x} ]; then
   echo "Cleaning /var/lib/sensu"
-  rm -rf /var/lib/sensu/*
+  rm -rf /var/lib/sensu/sensu-backend/*
+  rm -rf /var/lib/sensu/sensu-agent/*
 else
   echo "Using SHARED_SENSU_DIR ${SHARED_SENSU_DIR}"
 fi
+echo "Cleaning /var/cache/sensu"
+rm -rf /var/cache/sensu/sensu-backend/*
+rm -rf /var/cache/sensu/sensu-agent/*
 
 if [ -z ${ENABLE_SENSU_NIGHTLY+x} ]; then
   ## Using beta for now... after GA this will move to using releases
@@ -210,6 +214,7 @@ cp /tmp/sensu-influxdb-handler /usr/local/bin/
 # Going to do some general setup stuff
 
 if [ -z ${SE_USER+x} ]; then 
+  sudo systemctl stop sensu-agent.service
   sudo systemctl restart sensu-backend.service
   sudo systemctl enable sensu-backend.service
 #else

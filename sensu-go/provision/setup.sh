@@ -54,14 +54,8 @@ rm -rf /var/cache/sensu/sensu-backend/*
 rm -rf /var/cache/sensu/sensu-agent/*
 
 if [ -z ${ENABLE_SENSU_NIGHTLY+x} ]; then
-  ## Using beta for now... after GA this will move to using releases
-  #curl -s https://packagecloud.io/install/repositories/sensu/beta/script.rpm.sh | bash
-  #REPO="beta"
-  # FIXME: Update for GA
-  REPO="pre-release"
-  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181203-1438/rpm/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
-  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181203-1438/rpm/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
-  wget -q -nc -P /tmp/ http://sensu-ci-builds.s3.amazonaws.com/master/20181203-1438/rpm/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
+  curl -s https://packagecloud.io/install/repositories/sensu/stable/script.rpm.sh | bash
+  REPO="stable"
   
 
 else
@@ -122,13 +116,7 @@ yum -q -y groupinstall "Development Tools"
 echo -e "Done installing Development Tools"
 
 # Install Needed Yum Packages
-# FIXME: Update for GA
-#yum install -q -y ca-certificates sensu-backend sensu-cli sensu-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
-yum install -q -y ca-certificates curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
-# Install local pre-release rpm packages
-rpm -U --quiet /tmp/sensu-go-backend-5.0.0-1-el7.x86_64.rpm 
-rpm -U --quiet /tmp/sensu-go-cli-5.0.0-1-el7.x86_64.rpm 
-rpm -U --quiet /tmp/sensu-go-agent-5.0.0-1-el7.x86_64.rpm 
+yum install -q -y ca-certificates sensu-go-backend sensu-go-cli sensu-go-agent curl jq nc nano vim ntp influxdb grafana nagios-plugins-load rubygems ruby-devel
 
 wget -q -nc -P /tmp/ --content-disposition https://packagecloud.io/sensu/community/packages/el/7/sensu-plugins-ruby-0.2.0-1.el7.x86_64.rpm/download.rpm
 

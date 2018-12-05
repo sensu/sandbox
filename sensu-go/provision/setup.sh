@@ -203,9 +203,9 @@ tar xvzf /tmp/sensu-slack-handler_1.0.0_linux_amd64.tar.gz -C /tmp/
 cp /tmp/bin/sensu-slack-handler /usr/local/bin/
 
 ## Install Sensu Go InfluxDB Handler
-wget -q -nc https://github.com/sensu/sensu-influxdb-handler/releases/download/3.0.0/sensu-influxdb-handler_3.0.1_linux_amd64.tar.gz -P /tmp/
-tar xvzf /tmp/sensu-influxdb-handler_3.0.1_liniux_amd64.tar.gz -C /tmp/
-cp /tmp/sensu-influxdb-handler /usr/local/bin/
+wget -q -nc https://github.com/sensu/sensu-influxdb-handler/releases/download/3.0.1/sensu-influxdb-handler_3.0.1_linux_amd64.tar.gz -P /tmp/
+tar xvzf /tmp/sensu-influxdb-handler_3.0.1_linux_amd64.tar.gz -C /tmp/
+cp /tmp/bin/sensu-influxdb-handler /usr/local/bin/
 
 
 ### Install the metrics-curl.rb check

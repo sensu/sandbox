@@ -2,7 +2,7 @@
 ##
 # general configuration
 ##
-state-dir: "/var/lib/sensu"
+state-dir: "/var/lib/sensu/sensu-backend"
 
 ##
 # agent configuration
@@ -27,10 +27,25 @@ state-dir: "/var/lib/sensu"
 ##
 # store configuration
 ##
-#listen-client-urls: ""
-#listen-peer-urls: ""
-#initial-cluster: ""
-#initial-advertise-peer-urls: ""
-#initial-cluster-state: ""
-#initial-cluster-token: ""
-#name: ""
+#etcd-listen-client-urls: ""
+#etcd-listen-peer-urls: ""
+#etcd-initial-cluster: ""
+#etcd-initial-advertise-peer-urls: ""
+#etcd-initial-cluster-state: ""
+#etcd-initial-cluster-token: ""
+#etcd-name: ""
+
+##
+# dashboard configuration
+##
+#dashboard-host: "[::]" # listen on all IPv4 and IPv6 addresses
+#dashboard-port: 3000
+
+##
+# other
+##
+#cache-dir: "/var/cache/sensu/sensu-backend"
+#config-file: ""
+#debug: false
+#deregistration-handler: ""
+#log-level: "warn"

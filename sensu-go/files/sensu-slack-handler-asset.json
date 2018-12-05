@@ -1,0 +1,16 @@
+{
+  "type": "Asset",
+  "api_version": "core/v2",
+  "metadata": {
+    "name": "slack-handler",
+    "namespace": "default"
+  },
+  "spec": {
+    "filters": [
+      "system.os=='linux'", 
+      "system.arch=='amd64'"
+    ],
+    "sha512": "6a359f0b6489c2368b51848dde3d2a74234634af3856f4d3d4882617f471f1b042a919287b8f7a041806895a6318c57071978f31a120edf956ab432fdf867007",
+    "url": "https://github.com/sensu/sensu-slack-handler/releases/download/1.0.1/sensu-slack-handler_1.0.2_linux_amd64.tar.gz"
+  }
+}

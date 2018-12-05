@@ -267,7 +267,7 @@ We'll be using the `metrics-curl.rb` plugin.
 We can test its output using:
 
 ```
-/opt/sensu-plugins-ruby/embedded/bin/check-http.rb -u "http://localhost"
+/opt/sensu-plugins-ruby/embedded/bin/metrics-curl.rb -u "http://localhost"
 ```
 
 ```

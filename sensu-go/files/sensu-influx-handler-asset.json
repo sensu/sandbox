@@ -1,0 +1,14 @@
+{
+  "type": "Asset",
+  "api_version": "core/v2",
+  "metadata": {
+    "name": "influx-handler",
+    "namespace": "default"
+  },
+  "spec": {
+    "filters": [
+    ],
+    "sha512": "36acca1400205b9b76b437f5cdf5e64992a10f2b6483f98f26335f1af358595042159d3f6ac361c28d9dd8f00bcd479b7e21a3c60d10b6d3d1193b621e24eaf6",
+    "url": "https://github.com/sensu/sensu-influxdb-handler/releases/download/3.0.2/sensu-influxdb-handler_3.0.2_linux_amd64.tar.gz"
+  }
+}

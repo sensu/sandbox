@@ -7,8 +7,6 @@
 IPS=$(hostname -I)
 IPADDR=$( echo ${IPS[0]} | sed 's/^[ \t]*//;s/[ \t]*$//')
 
-
-
 if [ ! -f $HOME/.vagrant_env ] ; then
   echo "storing vagrant env state"
   touch $HOME/.vagrant_env
@@ -65,15 +63,8 @@ fi
 
 # Set up Sensu's repository
 if [ -z ${SE_USER+x} ]; then 
-  VERSION="Core"
-  VER="5C"
   echo "Preparing Sensu Go Core Sandbox"
 
-#else
-#  VERSION="Enterprise"
-#  VER="5E"
-#  echo "Preparing Sensu Go Enterprise Sandbox"
-#
 ## Add the Sensu Enterprise YUM repository
 #echo "[sensu-enterprise]
 #name=sensu-enterprise
@@ -164,12 +155,8 @@ sed -i 's/^;http_port = 3000/http_port = 4000/' /etc/grafana/grafana.ini
 cp -r /vagrant_files/etc/sensu/* /etc/sensu/
 cp  /vagrant_files/etc/sysconfig/sensu-backend /etc/sysconfig
 cp  /vagrant_files/etc/sysconfig/sensu-agent /etc/sysconfig
-# Copy Lesson specific configs.
-if [ -z ${SANDBOX_LESSON+x} ]; then 
-  echo "Using Base Sensu ${VER} Sandbox provisioning"
-else
-  echo "Using Sensu ${VER} Sandbox Lesson ${SANDBOX_LESSON} provisioning"
-fi
+
+
 
 
 # General Clean up of Sensu configuration 
@@ -232,8 +219,27 @@ curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana
 echo -e "Configure sensuctl"
 sudo -u vagrant sensuctl configure -n  --username "admin" --password 'P@ssw0rd!' --url "http://127.0.0.1:8080"  
 
+# Copy Lesson specific configs.
+if [ -z ${SANDBOX_LESSON+x} ]; then 
+  echo "Using Base Sensu Go Sandbox provisioning"
+else
+  echo "Using Sensu Go Sandbox Lesson ${SANDBOX_LESSON} provisioning"
+  file="/lesson_plans/${SANDBOX_LESSON}/provision/setup.sh" 
+  if [[ -x "$file" ]]
+  then
+    eval ${file}
+  else
+    echo "File '$file' is not executable or found"
+  fi
+fi
+
+
 echo -e "================="
-echo "Sensu Go $VERSION $REPO Sandbox is now up and running!"
+echo "Sensu Go Sandbox is now up and running!"
+if [ ! -z ${SANDBOX_LESSON+x} ]; then 
+  echo "  Configured for Lesson Plan: ${SANDBOX_LESSON}"
+fi
+echo -e "================="
 if [ -z ${ENABLE_SENSU_SANDBOX_PORT_FORWARDING+x} ]; then 
 echo "Port forwarding from the VM to this host is disabled:"
 echo "  Access the dashboard at http://${IPADDR}:3000"

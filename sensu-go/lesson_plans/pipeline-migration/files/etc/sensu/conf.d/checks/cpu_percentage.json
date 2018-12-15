@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "cpu_metrics": {
+      "type": "metric",
+      "command": "metrics-cpu-pcnt-usage.rb",
+      "subscribers": [
+        "localhost"
+      ],
+      "interval": 10,
+      "handlers": [
+        "influx-tcp"
+      ]
+    }
+  }
+}

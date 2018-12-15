@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "nagios_outside_office_hours_ssh_server_localhost": {
+      "command": "/usr/lib64/nagios/plugins/check_ssh -4 -r :::ssh.version|OpenSSH_7.4::: -P :::ssh.protocol|2.0::: localhost",
+      "type" : "metric",
+      "handlers": [ "silence_outside_office_hours_logevent" ],
+      "interval": 10,
+      "subscribers": ["localhost"],
+      "timeout": 15
+    },
+    "nagios_during_office_hours_ssh_server_localhost": {
+      "command": "/usr/lib64/nagios/plugins/check_ssh -4 -r :::ssh.version|OpenSSH_7.4::: -P :::ssh.protocol|2.0::: localhost",
+      "type" : "metric",
+      "handlers": [ "silence_during_office_hours_logevent" ],
+      "interval": 10,
+      "subscribers": ["localhost"],
+      "timeout": 15
+    }
+  }
+}
+

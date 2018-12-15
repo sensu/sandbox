@@ -1,0 +1,17 @@
+{
+  "filters": {
+    "silence_outside_office_hours": {
+      "attributes": {
+        "timestamp": "eval: ([0,6].include?(Time.at(value).wday) || Time.at(value).hour.between?(1,14)) || (Time.at(value).wday==1 && Time.at(value).hour==0)"
+      }, 
+      "negate": true
+    },
+    "silence_during_office_hours": {
+      "attributes": {
+        "timestamp": "eval: ([0,6].include?(Time.at(value).wday) || Time.at(value).hour.between?(1,14)) || (Time.at(value).wday==1 && Time.at(value).hour==0)"
+      }, 
+      "negate": false
+    }
+  }
+} 
+

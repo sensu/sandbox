@@ -4,7 +4,7 @@
 ##
 #name: ""
 #namespace: "default"
-subscriptions: "migration"
+subscriptions: "localhost,proxy-request"
 #backend-url:
 #  - "ws://127.0.0.1:8081"
 

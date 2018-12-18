@@ -3,7 +3,7 @@
 PLAN=${SANDBOX_LESSON:unknown}
 echo "Provisiong $PLAN Lesson Plan:"
 echo "  ...Adding additional packages"
-yum install tree nagios-plugins-ssh
+yum -y install tree nagios-plugins-ssh
 
 
 echo "  ...Copying $PLAN /etc/sensu/"

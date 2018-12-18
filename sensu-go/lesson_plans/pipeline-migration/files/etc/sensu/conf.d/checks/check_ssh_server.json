@@ -1,7 +1,7 @@
 {
   "checks": {
     "nagios_check_ssh_server_localhost": {
-      "command": "/usr/lib64/nagios/plugins/check_ssh -4 -r :::ssh.version|OpenSSH_7.4::: -P :::ssh.protocol|2.0::: localhost",
+      "command": "/usr/lib64/nagios/plugins/check_ssh -4 -r :::ssh.version|OpenSSH_7.4::: -P :::ssh.protocol|1.0::: localhost",
       "type" : "metric",
       "handlers": [ "logevent" ],
       "interval": 10,

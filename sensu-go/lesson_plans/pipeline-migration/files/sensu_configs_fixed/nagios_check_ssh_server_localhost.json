@@ -1,0 +1,31 @@
+{
+  "api_version":"core/v2",
+  "type":"Check",
+  "metadata":{
+    "namespace":"default",
+    "name":"nagios_check_ssh_server_localhost",
+    "labels":{
+      "ssh.protocol": "2.0",
+      "ssh.version": "OpenSSH_7.4"
+    },
+    "annotations":{
+      "sensu.io.json_attributes":"{\"type\":\"metric\"}"
+    }
+  },
+  "spec":{
+    "command":"/usr/lib64/nagios/plugins/check_ssh -4 -r {{.labels.ssh_version | default \"OpenSSH_7.4\" }} -P {{.labels.ssh_protocol | default \"1.0\" }} localhost",
+    "subscriptions":[
+      "localhost"
+    ],
+    "publish":true,
+    "interval":10,
+    "handlers":[
+      "logevent"
+    ],
+    "output_metric_handlers":[
+      "influxdb"
+    ],
+    "output_metric_format": "nagios_perfdata",
+    "timeout":15
+  }
+}

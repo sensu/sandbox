@@ -8,6 +8,7 @@ yum -y install tree nagios-plugins-ssh
 
 echo "  ...Copying $PLAN /etc/sensu/"
 cp -r /lesson_plans/$PLAN/files/etc/sensu/* /etc/sensu/
+cp -r /lesson_plans/$PLAN/files/sensu_configs_fixed /home/vagrant/
 
 echo " ...Starting up $PLAN services"
 systemctl restart sensu-agent

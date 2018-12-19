@@ -20,16 +20,12 @@ if [ ! -f $HOME/.vagrant_env ] ; then
   if [ ! -z ${ENABLE_SENSU_SANDBOX_PORT_FORWARDING+x} ]; then
     echo "ENABLE_SENSU_SANDBOX_PORT_FORWARDING=${ENABLE_SENSU_SANDBOX_PORT_FORWARDING}" >> $HOME/.vagrant_env
   fi
-  if [ ! -z ${ENABLE_SENSU_NIGHTLY+x} ]; then
-    echo "ENABLE_SENSU_NIGHTLY=${ENABLE_SENSU_NIGHTLY}" >> $HOME/.vagrant_env
-  fi
 fi
 
 if [ -f $HOME/.vagrant_env ] ; then
   source $HOME/.vagrant_env
   echo "Using saved provisioning state:"
   echo "ENABLE_SENSU_SANDBOX_PORT_FORWARDING=${ENABLE_SENSU_SANDBOX_PORT_FORWARDING}"
-  echo "ENABLE_SENSU_NIGHTLY=${ENABLE_SENSU_NIGHTLY}"
   echo "SHARED_SENSU_DIR=${SHARED_SENSU_DIR}"
   echo "SE_USER=${SE_USER}" 
   echo "SE_PASS=${SE_PASS}"
@@ -51,16 +47,9 @@ echo "Cleaning /var/cache/sensu"
 rm -rf /var/cache/sensu/sensu-backend/*
 rm -rf /var/cache/sensu/sensu-agent/*
 
-if [ -z ${ENABLE_SENSU_NIGHTLY+x} ]; then
-  curl -s https://packagecloud.io/install/repositories/sensu/stable/script.rpm.sh | bash
-  REPO="stable"
+curl -s https://packagecloud.io/install/repositories/sensu/stable/script.rpm.sh | bash
+REPO="stable"
   
-
-else
-  curl -s https://packagecloud.io/install/repositories/sensu/nightly/script.rpm.sh | bash
-  REPO="nightly"
-fi
-
 # Set up Sensu's repository
 if [ -z ${SE_USER+x} ]; then 
   echo "Preparing Sensu Go Core Sandbox"

@@ -2,9 +2,14 @@
 ##
 # agent configuration
 ##
+
 #name: ""
+
 #namespace: "default"
-subscriptions: "localhost,proxy-request"
+
+#subscriptions: 
+#  - "localhost"
+
 #backend-url:
 #  - "ws://127.0.0.1:8081"
 

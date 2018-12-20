@@ -10,6 +10,10 @@
 #subscriptions: 
 #  - "localhost"
 
+#labels:
+#  ssh_protocol: "2.0"
+#  ssh_version: "OpenSSH_7.4" 
+
 #backend-url:
 #  - "ws://127.0.0.1:8081"
 
@@ -54,3 +58,5 @@
 #extended-attributes: ""
 #log-level: "warn"
 #redact: ""
+
+

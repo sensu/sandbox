@@ -315,7 +315,13 @@ labels:
 
 ```
 
-Restart the sensu-agent service again and wait for the check to run. Now the check should be returning a check status of 0.
+Restart the sensu-agent service again to make sure the changes to the config file are picked up by the service. 
+
+```
+[sensu_go_sandbox]$ sudo systemctl restart sensu-agent 
+```
+
+Wait a minute for the check to run. Now the check should be returning a check status of 0.
 
 ```
 [sensu_go_sandbox]$ sensuctl event info sensu-go-sandbox   nagios_check_ssh_server_localhost

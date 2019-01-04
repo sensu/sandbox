@@ -1,0 +1,19 @@
+{
+  "client": {
+    "name": "migration-1.x-client",
+    "address": "127.0.0.1",
+    "status_url": "http://localhost:3000",
+    "environment": "development",
+    "deregister": false,
+    "subscriptions": [
+      "proxy-request",
+      "localhost",
+      "dev"
+    ],
+    "socket": {
+      "bind": "127.0.0.1",
+      "port": 3030
+    }
+  }
+}
+

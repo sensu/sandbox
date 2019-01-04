@@ -1,0 +1,22 @@
+{
+  "checks": {
+    "check-http-proxy-request": {
+      "interval": 20,
+      "command": "check-http.rb -u :::url:::  :::command_arguments| :::",
+      "subscribers": [
+        "proxy-request"
+      ],
+      "occurrences": ":::occurrences|3:::",
+      "refresh": ":::refresh|1800:::",
+      "handlers": ["logevent"],
+      "contact": ":::contact|unknown:::",
+      "proxy_requests": {
+        "client_attributes": {
+          "url": "eval: defined?(value)",
+          "subscriptions": "eval: value.include?('http-proxy-request')"
+        }
+      }
+    }
+  }
+}
+

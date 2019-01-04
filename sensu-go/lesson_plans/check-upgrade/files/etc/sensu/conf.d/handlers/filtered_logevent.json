@@ -1,0 +1,14 @@
+{
+  "handlers": {
+    "silence_outside_office_hours_logevent": {
+      "type": "pipe",
+      "filter": "silence_outside_office_hours",
+      "command": "handler-logevent.rb"
+    },
+    "silence_during_office_hours_logevent": {
+      "type": "pipe",
+      "filter": "silence_during_office_hours",
+      "command": "handler-logevent.rb"
+    }
+  }
+}

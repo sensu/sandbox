@@ -63,13 +63,13 @@ Vagrant.configure("2") do |config|
       envvars["SHARED_SENSU_DIR"] = ENV['SHARED_SENSU_DIR'] 
     end
 
-    if ENV['ENABLE_SENSU_NIGHTLY']
-      envvars["ENABLE_SENSU_NIGHTLY"] = ENV['ENABLE_SENSU_NIGHTLY']
-    end
-
     sandbox.vm.synced_folder "./files", "/vagrant_files"
-    sandbox.vm.provision "shell",
-      env: envvars,
-      path: "./provision/setup.sh"
+    sandbox.vm.synced_folder "./lesson_plans", "/lesson_plans"
+    sandbox.vm.provision :shell do |s|
+      envars||={}
+      envvars['SANDBOX_LESSON']=ENV['SANDBOX_LESSON']
+      s.env = envvars
+      s.path = "./provision/setup.sh"
+    end
   end
 end

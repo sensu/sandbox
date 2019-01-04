@@ -1,0 +1,8 @@
+{
+  "handlers": {
+    "influx-tcp": {
+      "type": "pipe",
+      "command": "/opt/sensu/embedded/bin/metrics-influxdb.rb"
+    }
+  }
+}

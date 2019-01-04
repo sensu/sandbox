@@ -1,0 +1,8 @@
+{
+  "handlers": {
+    "logevent": {
+      "type": "pipe",
+      "command": "handler-logevent.rb"
+    }
+  }
+}

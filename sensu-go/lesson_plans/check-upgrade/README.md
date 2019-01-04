@@ -298,6 +298,10 @@ But there’s still a problem: the ssh protocol `2.0` doesn’t match the expect
 
 Edit `/etc/sensu/agent.yml` to include labels:
 ```
+[sensu_go_sandbox]$ sudo nano /etc/sensu/agent.yml
+```
+
+```
 ##
 # agent configuration
 ##
@@ -310,6 +314,7 @@ labels:
 ...
 
 ```
+
 Restart the sensu-agent service again and wait for the check to run. Now the check should be returning a check status of 0.
 
 ```

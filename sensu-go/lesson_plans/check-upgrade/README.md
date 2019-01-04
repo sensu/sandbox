@@ -259,7 +259,13 @@ Nagios_check_ssh_server_localhost  /usr/lib64/nagios/plugins/check_ssh ...
 The check hasn’t been scheduled yet as the Sensu Go agent is not yet subscribed to the localhost subscription.
 
 ## Lesson \#5: Adjust the Sensu Go agent configuration
-Edit `/etc/sensu/agent.yml` and make sure include the localhost subscription:
+Edit `/etc/sensu/agent.yml` 
+```
+[sensu_go_sandbox]$ sudo nano /etc/sensu/agent.yml
+```
+
+and make sure include the localhost subscription by uncommenting the subscription section and ensuring `localhost` is in the list of subscriptions:
+
 ```
 ##
 # agent configuration
@@ -268,6 +274,7 @@ Edit `/etc/sensu/agent.yml` and make sure include the localhost subscription:
 subscriptions:
  - "localhost"
 ...
+
 ```
 And restart the agent:
 ```

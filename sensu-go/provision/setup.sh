@@ -142,8 +142,6 @@ sed -i 's/^;http_port = 3000/http_port = 4000/' /etc/grafana/grafana.ini
 
 # Copy Base Sensu configuration files
 cp -r /vagrant_files/etc/sensu/* /etc/sensu/
-cp  /vagrant_files/etc/sysconfig/sensu-backend /etc/sysconfig
-cp  /vagrant_files/etc/sysconfig/sensu-agent /etc/sysconfig
 
 
 

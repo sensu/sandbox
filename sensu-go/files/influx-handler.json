@@ -8,11 +8,15 @@
       "annotations": null
     },
     "type": "pipe",
-    "command": "/usr/local/bin/sensu-influxdb-handler  --addr 'http://127.0.0.1:8086' --db-name 'sensu' -u 'sensu' -p 'sandbox'",
+    "command": "/usr/local/bin/sensu-influxdb-handler --db-name 'sensu'",
     "timeout": 0,
     "handlers": [],
     "filters": [],
-    "env_vars": [],
+    "env_vars": [
+      "INFLUXDB_ADDR=http://127.0.0.1:8086",
+      "INFLUXDB_USER=sensu",
+      "INFLUXDB_PASS=sandbox"
+    ],
     "runtime_assets": []
   }
 }

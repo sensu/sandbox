@@ -8,7 +8,7 @@
       "annotations": null
     },
     "type": "pipe",
-    "command": "/usr/local/bin/sensu-slack-handler -c \"${KEEPALIVE_SLACK_CHANNEL}\" -w \"${KEEPALIVE_SLACK_WEBHOOK}\"",
+    "command": "sensu-slack-handler -c \"${KEEPALIVE_SLACK_CHANNEL}\" -w \"${KEEPALIVE_SLACK_WEBHOOK}\"",
     "timeout": 0,
     "handlers": [],
     "filters": [],

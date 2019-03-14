@@ -149,7 +149,8 @@ cp -r /vagrant_files/etc/sensu/* /etc/sensu/
 # General Clean up of Sensu configuration 
 chown -R sensu:sensu /etc/sensu
 
-# Copy Grafana configs
+# Copy Grafana configs and make /var/lib/grafana/dashboards
+mkdir /var/lib/grafana/dashboards
 cp -r /vagrant_files/etc/grafana/* /etc/grafana/
 chown -R grafana:grafana /etc/grafana
 chown -R grafana:grafana /var/lib/grafana

@@ -17,8 +17,6 @@
       "INFLUXDB_USER=sensu",
       "INFLUXDB_PASS=sandbox"
     ],
-    "runtime_assets": [
-      "influx-handler"
-    ]
+    "runtime_assets": []
   }
 }

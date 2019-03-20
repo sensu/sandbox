@@ -8,7 +8,7 @@
       "annotations": null
     },
     "type": "pipe",
-    "command": "/usr/local/bin/sensu-influxdb-handler --db-name 'sensu'",
+    "command": "sensu-influxdb-handler --db-name 'sensu'",
     "timeout": 0,
     "handlers": [],
     "filters": [],

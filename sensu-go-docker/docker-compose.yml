@@ -2,10 +2,7 @@
 version: "3"
 services:
   sensu-backend:
-    build:
-      context: docker/sensu-backend/
-      dockerfile: Dockerfile.debian
-    image: sensu-backend:latest
+    image: sensu/sensu:latest
     ports:
     - 3000:3000
     - 8080:8080

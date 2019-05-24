@@ -23,7 +23,7 @@ Report issues or share feedback by [opening an issue in this repo](https://githu
 [Download from GitHub](https://github.com/sensu/sandbox/archive/enterprise.zip) or clone the repository:
 
 ```
-git clone https://github.com/sensu/sandbox.git && cd sandbox/
+git clone https://github.com/sensu/sandbox.git && cd sandbox/sensu/enterprise
 ```
 
 **3. Add your Sensu Enterprise username and password**
@@ -33,7 +33,7 @@ git clone https://github.com/sensu/sandbox.git && cd sandbox/
 Then add your Sensu Enterprise username and password to the sandbox:
 
 ```
-cd sensu/enterprise && export SE_USER=REPLACEME && export SE_PASS=REPLACEME
+export SE_USER=REPLACEME && export SE_PASS=REPLACEME
 ```
 
 **4. Start Vagrant:**
@@ -448,10 +448,10 @@ curl -s http://localhost:4567/clients | jq .
 $ curl -s http://localhost:4567/clients | jq .
 [
   {
-    "name": "sensu-enterprise-sandbox",
+    "name": "sensu-sandbox-client",
     "address": "10.0.2.15",
     "subscriptions": [
-      "client:sensu-enterprise-sandbox"
+      "client:sensu-sandbox-client"
     ],
     "version": "1.4.3",
     "timestamp": 1534284788
@@ -474,7 +474,7 @@ sudo nano /etc/sensu/conf.d/client.json
 ```
 {
   "client": {
-    "name": "sensu-enterprise-sandbox",
+    "name": "sensu-sandbox-client",
     "subscriptions": ["sandbox-testing"]
   }
 }
@@ -496,10 +496,10 @@ curl -s http://localhost:4567/clients | jq .
 $ curl -s http://localhost:4567/clients | jq .
 [
   {
-    "name": "sensu-enterprise-sandbox",
+    "name": "sensu-sandbox-client",
     "address": "10.0.2.15",
     "subscriptions": [
-      "client:sensu-enterprise-sandbox",
+      "client:sensu-sandbox-client",
       "sandbox-testing"
     ],
     "version": "1.4.3",
@@ -761,6 +761,7 @@ Here are some resources to help continue your journey:
 - [Reduce alert fatigue with Sensu Enterprise's built-in filters](https://docs.sensu.io/sensu-enterprise/latest/built-in-filters/)
 - [Add teams and organizations to Sensu Enterprise](https://docs.sensu.io/sensu-enterprise-dashboard/latest/rbac/overview)
 
+To exit out of the sandbox, use `CTRL`+`D`, then use `vagrant destroy` to erase the sandbox.
 
 ## Appendix: Sandbox Architecture
 

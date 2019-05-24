@@ -141,7 +141,8 @@ echo "Configuring services"
 sed -i 's/^bind 127.0.0.1/bind 0.0.0.0/' /etc/redis.conf
 sed -i 's/^protected-mode yes/protected-mode no/' /etc/redis.conf
 
-# Copy Grafana configs
+# Copy Grafana configs and make /var/lib/grafana/dashboards
+mkdir /var/lib/grafana/dashboards
 cp -r /vagrant_files/etc/grafana/* /etc/grafana/
 chown -R grafana:grafana /etc/grafana
 chown -R grafana:grafana /var/lib/grafana

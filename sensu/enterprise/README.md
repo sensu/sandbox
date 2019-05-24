@@ -662,6 +662,7 @@ $ curl -s http://localhost:4567/settings | jq .
 
 Log in to Grafana as username: `admin` password: `admin`.
 We should see a graph of real HTTP response codes for Nginx.
+(You may want to change the time frame in Grafana to show the last 15 minutes of data.)
 
 Now if we turn Nginx off, we should see the impact in Grafana:
 

@@ -21,7 +21,7 @@ services:
     - "sensu-agent-data:/var/cache/sensu/sensu-agent"
     depends_on:
     - sensu-backend
-    command: "sensu-agent start --backend-url ws://sensu-backend:8081 --log-level debug --subscriptions webserver"
+    command: "sensu-agent start --backend-url ws://sensu-backend:8081 --log-level debug --subscriptions webserver --api-host 0.0.0.0"
 
   nginx-server:
     image: nginx:latest

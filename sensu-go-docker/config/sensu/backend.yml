@@ -1,13 +1,15 @@
 ---
+# Sensu backend configuration
+
 ##
 # backend configuration
 ##
-state-dir: "/var/lib/sensu"
+state-dir: "/var/lib/sensu/sensu-backend"
 #cache-dir: "/var/cache/sensu/sensu-backend"
-#config-file: ""
+#config-file: "/etc/sensu/backend.yml"
 #debug: false
-#deregistration-handler: ""
-#log-level: "warn"
+#deregistration-handler: "example_handler"
+#log-level: "warn" # available log levels: panic, fatal, error, warn, info, debug
 
 ##
 # agent configuration
@@ -18,8 +20,16 @@ state-dir: "/var/lib/sensu"
 ##
 # api configuration
 ##
-#api-host: "[::]" # listen on all IPv4 and IPv6 addresses
-#api-port: 8080
+#api-listen-address: "[::]:8080" # listen on all IPv4 and IPv6 addresses
+#api-url: "http://localhost:8080"
+
+##
+# dashboard configuration
+##
+#dashboard-cert-file: "/path/to/ssl/cert.pem"
+#dashboard-key-file: "/path/to/ssl/key.pem"
+#dashboard-host: "[::]" # listen on all IPv4 and IPv6 addresses
+#dashboard-port: 3000
 
 ##
 # ssl configuration
@@ -32,17 +42,22 @@ state-dir: "/var/lib/sensu"
 ##
 # store configuration
 ##
-#etcd-listen-client-urls: ""
-#etcd-listen-peer-urls: ""
 #etcd-advertise-client-urls: "http://localhost:2379"
-#etcd-initial-cluster: ""
-#etcd-initial-advertise-peer-urls: ""
-#etcd-initial-cluster-state: ""
-#etcd-initial-cluster-token: ""
-#etcd-name: ""
-
-##
-# dashboard configuration
-##
-#dashboard-host: "[::]" # listen on all IPv4 and IPv6 addresses
-#dashboard-port: 3000
+#etcd-cert-file: "/path/to/ssl/cert.pem"
+#etcd-client-cert-auth: false
+#etcd-initial-advertise-peer-urls: "http://127.0.0.1:2380"
+#etcd-initial-cluster: "default=http://127.0.0.1:2380"
+#etcd-initial-cluster-state: "new" # new or existing
+#etcd-initial-cluster-token: "sensu"
+#etcd-key-file: "/path/to/ssl/key.pem"
+#etcd-listen-client-urls: "http://127.0.0.1:2379"
+#etcd-listen-peer-urls: "http://127.0.0.1:2380"
+#etcd-name: "default"
+#etcd-peer-cert-file: "/path/to/ssl/cert.pem"
+#etcd-peer-client-cert-auth: false
+#etcd-peer-key-file: "/path/to/ssl/key.pem"
+#etcd-peer-trusted-ca-file: "/path/to/ssl/key.pem"
+#etcd-trusted-ca-file: "/path/to/ssl/key.pem"
+#no-embed-etcd: false
+#etcd-cipher-suits
+#  - TLS_EXAMPLE

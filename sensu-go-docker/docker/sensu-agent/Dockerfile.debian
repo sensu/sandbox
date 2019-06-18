@@ -1,0 +1,9 @@
+FROM debian:stretch
+ARG SENSU_VERSION=5.2.0
+ARG SENSU_PLATFORM=linux
+ARG SENSU_ARCH=amd64
+RUN \
+  apt-get update && apt-get install -y curl ca-certificates && \
+  curl -LO https://s3-us-west-2.amazonaws.com/sensu.io/sensu-go/${SENSU_VERSION}/sensu-enterprise-go_${SENSU_VERSION}_${SENSU_PLATFORM}_${SENSU_ARCH}.tar.gz && \
+  tar -xzf sensu-enterprise-go_${SENSU_VERSION}_${SENSU_PLATFORM}_${SENSU_ARCH}.tar.gz -C /usr/bin/ && \
+  rm sensu-enterprise-go_${SENSU_VERSION}_${SENSU_PLATFORM}_${SENSU_ARCH}.tar.gz

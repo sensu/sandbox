@@ -9,6 +9,12 @@ This sandbox uses Docker to deploy a basic Sensu stack:
 - **InfluxDB** to store metrics
 - **Grafana** for visualization
 
+To download the sandbox, clone the repository:
+
+```
+git clone https://github.com/sensu/sandbox && cd sandbox/sensu-go-docker
+```
+
 To deploy the sandbox, run:
 
 ```

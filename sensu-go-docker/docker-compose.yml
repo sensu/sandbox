@@ -44,7 +44,7 @@ services:
     image: influxdb-init:latest
     depends_on:
     - influxdb
-    command: "curl -i -XPOST http://influxdb:8086/query --data-urlencode 'q=CREATE DATABASE sensu'"
+    command: "dockerize -wait tcp://influxdb:8086 -timeout 30s curl -i -XPOST http://influxdb:8086/query --data-urlencode 'q=CREATE DATABASE sensu'"
 
   grafana:
     image: grafana/grafana:5.1.0

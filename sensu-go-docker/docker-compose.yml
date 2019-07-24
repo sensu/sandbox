@@ -18,11 +18,6 @@ services:
 #    image: sensu/sensu:latest
 #    ports:
 #    - 3031:3031
-#    volumes:
-#    - "./config/sensu/agent.yml:/etc/sensu/agent.yml"
-#    - "sensu-agent-data:/var/cache/sensu/sensu-agent"
-#    depends_on:
-#    - sensu-backend
 #    command: "sensu-agent start --backend-url ws://sensu-backend:8081 --log-level debug --subscriptions webserver --api-host 0.0.0.0"
 
   nginx-server:
@@ -63,5 +58,3 @@ volumes:
     driver: local
   influxdb-data:
     driver: local
-#  sensu-agent-data:
-#    driver: local

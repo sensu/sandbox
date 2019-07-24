@@ -1,26 +1,7 @@
 {
-  "title": "HTTP Service",
-  "uid": "http_service",
-  "version": 6,
-  "timezone": "America/Los_Angeles",
-  "time": {
-    "from": "now-15m",
-    "to": "now"
-  },
-  "refresh": "5s",
-  "schemaVersion": 16,
-  "style": "dark",
-  "tags": [],
-  "editable": true,
-  "gnetId": null,
-  "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1546276861205,
-  "links": [],
   "annotations": {
     "list": [
       {
-        "$$hashKey": "object:155",
         "builtIn": 1,
         "datasource": "-- Grafana --",
         "enable": true,
@@ -31,6 +12,11 @@
       }
     ]
   },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 3,
+  "links": [],
   "panels": [
     {
       "aliasColors": {},
@@ -40,25 +26,23 @@
       "datasource": "InfluxDB",
       "fill": 1,
       "gridPos": {
-        "h": 8,
-        "w": 24,
+        "h": 9,
+        "w": 12,
         "x": 0,
         "y": 0
       },
       "id": 2,
       "legend": {
-        "alignAsTable": true,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "rightSide": true,
         "show": true,
         "total": false,
         "values": false
       },
       "lines": true,
-      "linewidth": 3,
+      "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -71,8 +55,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "$$hashKey": "object:224",
-          "alias": "Response Time ($tag_entity)",
+          "$$hashKey": "object:468",
           "groupBy": [
             {
               "params": [
@@ -82,27 +65,21 @@
             },
             {
               "params": [
-                "entity"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "linear"
+                "null"
               ],
               "type": "fill"
             }
           ],
-          "measurement": "time",
+          "measurement": "sensu-agent_1",
           "orderByTime": "ASC",
           "policy": "default",
-          "refId": "B",
+          "refId": "A",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "value"
+                  "curl_timings.time_total"
                 ],
                 "type": "field"
               },
@@ -112,25 +89,13 @@
               }
             ]
           ],
-          "tags": [
-            {
-              "key": "entity",
-              "operator": "=~",
-              "value": "/^$Entity$/"
-            },
-            {
-              "condition": "AND",
-              "key": "region",
-              "operator": "=~",
-              "value": "/^$Region$/"
-            }
-          ]
+          "tags": []
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Web Service",
+      "title": "HTTP Service",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -146,7 +111,7 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:1024",
+          "$$hashKey": "object:764",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -155,7 +120,7 @@
           "show": true
         },
         {
-          "$$hashKey": "object:1025",
+          "$$hashKey": "object:765",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -170,57 +135,15 @@
       }
     }
   ],
+  "schemaVersion": 16,
+  "style": "dark",
+  "tags": [],
   "templating": {
-    "list": [
-      {
-        "allValue": "*",
-        "current": {
-          "text": "us-west-1",
-          "value": "us-west-1"
-        },
-        "datasource": "InfluxDB",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Region",
-        "multi": true,
-        "name": "Region",
-        "options": [],
-        "query": "SHOW TAG VALUES WITH KEY = \"region\"",
-        "refresh": 2,
-        "regex": "",
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "allValue": "*",
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": "InfluxDB",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Entity",
-        "multi": true,
-        "name": "Entity",
-        "options": [],
-        "query": "SHOW TAG VALUES WITH KEY = \"entity\"",
-        "refresh": 2,
-        "regex": "",
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      }
-    ]
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -246,5 +169,9 @@
       "7d",
       "30d"
     ]
-  }
+  },
+  "timezone": "",
+  "title": "HTTP Service Dashboard",
+  "uid": "sF0lhYNZk",
+  "version": 4
 }

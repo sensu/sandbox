@@ -55,7 +55,6 @@
       "steppedLine": false,
       "targets": [
         {
-          "$$hashKey": "object:468",
           "groupBy": [
             {
               "params": [
@@ -111,7 +110,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:764",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -120,7 +118,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:765",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -142,7 +139,7 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {

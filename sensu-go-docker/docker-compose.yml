@@ -10,6 +10,8 @@ services:
     volumes:
     - "./config/sensu/backend.yml:/etc/sensu/backend.yml"
     - "sensu-backend-data:/var/lib/sensu/etcd"
+    environment:
+      SENSU_INTERNAL_ENVIRONMENT: sandbox
     command: "sensu-backend start --log-level info"
 
 #  sensu-agent:

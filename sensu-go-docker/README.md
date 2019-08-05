@@ -1,5 +1,7 @@
 # Sensu Go Docker sandbox
 
+**[Start the interactive tutorial using the Sensu Go Docker sandbox](https://docs.sensu.io/sensu-go/latest/getting-started/tutorial/)**
+
 The Sensu Go Docker sandbox helps learn the basics of Sensu and monitor a web server.
 This sandbox uses Docker to deploy a basic Sensu stack:
 

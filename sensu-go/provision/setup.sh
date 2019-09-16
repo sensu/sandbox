@@ -221,6 +221,7 @@ else
   fi
 fi
 
+echo "SENSU_INTERNAL_ENVIRONMENT=sandbox-vagrant" >> /etc/default/sensu-backend
 
 echo -e "================="
 echo "Sensu Go Sandbox is now up and running!"

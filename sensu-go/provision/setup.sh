@@ -77,7 +77,7 @@ cp /vagrant_files/etc/yum.repos.d/influxdb.repo /etc/yum.repos.d/influxdb.repo
 cp /vagrant_files/etc/yum.repos.d/grafana.repo /etc/yum.repos.d/grafana.repo
 
 # Add the EPEL repositories
-[[ "$(rpm -qa | grep epel-release)" ]] || rpm -U --quiet https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+yum install -y epel-release
 
 # Import GPG keys
 cd /tmp

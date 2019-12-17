@@ -203,6 +203,10 @@ influx -execute "GRANT ALL ON sensu TO sensu"
 curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/dashboard-http.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
 curl -s -XPOST -H 'Content-Type: application/json' -d@/vagrant_files/etc/grafana/dashboard-disk.json HTTP://admin:admin@127.0.0.1:4000/api/dashboards/db
 
+
+echo -e "Initializing backend with cluster admin"
+sudo -u sensu sensu-backend init --cluster-admin-username 'admin' --cluster-admin-password 'P@ssw0rd!'
+
 # setup sensuctl
 echo -e "Configure sensuctl"
 sudo -u vagrant sensuctl configure -n  --username "admin" --password 'P@ssw0rd!' --url "http://127.0.0.1:8080"  

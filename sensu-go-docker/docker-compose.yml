@@ -12,7 +12,11 @@ services:
     - "sensu-backend-data:/var/lib/sensu/etcd"
     environment:
       SENSU_INTERNAL_ENVIRONMENT: sandbox
-    command: "sensu-backend start --log-level info"
+      SENSU_BACKEND_CLUSTER_ADMIN_USERNAME: admin
+      SENSU_BACKEND_CLUSTER_ADMIN_PASSWORD: 'Q%aoOOdt6p*8BeT028%&Znf$'
+    command: 
+    - sensu-backend start --log-level info
+    - sensu-backend init
     restart: always
 
 #  sensu-agent:

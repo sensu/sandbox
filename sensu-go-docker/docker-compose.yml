@@ -2,7 +2,7 @@
 version: "3"
 services:
   sensu-backend:
-    image: sensu/sensu:latest
+    image: sensu/sensu:5.16.1
     ports:
     - 3000:3000
     - 8080:8080

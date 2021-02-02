@@ -1,6 +1,0 @@
-{
-  "tessen": {
-    "enabled": true,
-    "identity_key": "sensu-core-sandbox"
-  }
-}

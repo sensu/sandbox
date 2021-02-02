@@ -1,7 +1,0 @@
-{
-  "client": {
-    "name": "sensu-sandbox-client",
-    "subscriptions": []
-  }
-}
-

@@ -5,7 +5,7 @@
 Ready-made development environments for Sensu
 
 ## Deprecation Notice
-This repository has been deprecated in favor of the Docker based [Sensu Workshop]https://github.com/sensu/sensu-go-workshop
+This repository has been deprecated in favor of the Docker based [Sensu Workshop](https://github.com/sensu/sensu-go-workshop).
 
 ### Learn Sensu Go
 A CentOS 7 virtual machine with Sensu Go, InfluxDB, and Grafana

@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.20.3
 RUN apk add -U --no-cache curl
 ENV DOCKERIZE_VERSION v0.6.1
 RUN curl https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz -Lso dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
